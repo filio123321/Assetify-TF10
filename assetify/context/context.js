@@ -1,54 +1,68 @@
-'use client'
+"use client"
 
-import { createContext, useState, useContext } from 'react';
-import Web3Modal from 'web3modal';
-import WalletConnectProvider from '@walletconnect/web3-provider';
-import { ethers } from 'ethers';
-import { BrowserProvider } from "ethers";
+import React, { createContext, useEffect, useState } from "react";
 
+export const AppContext = createContext();
 
-const AccountContext = createContext();
-export const useAccount = () => useContext(AccountContext);
+const { ethereum } = typeof window !== "undefined" ? window : {};
 
-export const AccountProvider = ({ children }) => {
-    const [signer, setSigner] = useState('');
+const AppProvider = ({ children }) => {
+    const [account, setAccount] = useState("");
+    const [error, setError] = useState("");
 
-    async function connect() {
-        try {
-            const web3Modal = new Web3Modal({
-                cacheProvider: false, // You might want to set this to true to remember the user's wallet choice
-                providerOptions: {
-                    walletconnect: {
-                        package: WalletConnectProvider,
-                        options: {
-                            infuraId: "your-infura-id", // Replace this with your own Infura ID
-                        },
-                    },
-                },
-            });
-
-            const connection = await web3Modal.connect();
-            // const provider = new ethers.providers.Web3Provider(connection);
-            const BrowserProvider = new BrowserProvider(window.ethereum);
-            // const signer = provider.getSigner();
-            // const address = await signer.getAddress();
-            console.log('address:', address);
-            // console.log('accounts:', accounts);
-            setSigner(BrowserProvider);
-            localStorage.setItem('isWalletConnected', 'true');
-        } catch (err) {
-            console.error('error:', err);
+    const checkEthereumExists = () => {
+        if (!ethereum) {
+            setError("Please Install MetaMask.");
+            return false;
         }
-    }
-
-    const logout = () => {
-        setProvider('');
-        localStorage.removeItem('isWalletConnected');
-        // Add any other cleanup logic here
+        return true;
     };
+
+    const getConnectedAccounts = async () => {
+        setError("");
+        try {
+            const accounts = await ethereum.request({
+                method: "eth_accounts",
+            });
+            console.log(accounts);
+            setAccount(accounts[0]);
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const connectWallet = async () => {
+        setError("");
+        if (checkEthereumExists()) {
+            try {
+                const accounts = await ethereum.request({
+                    method: "eth_requestAccounts",
+                });
+                console.log(accounts);
+                setAccount(accounts[0]);
+            } catch (err) {
+                setError(err.message);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (checkEthereumExists()) {
+            ethereum.on("accountsChanged", getConnectedAccounts);
+            getConnectedAccounts();
+        }
+        return () => {
+            ethereum.removeListener("accountsChanged", getConnectedAccounts);
+        };
+    }, []);
+
     return (
-        <AccountContext.Provider value={{ signer, connect, logout }}>
+        <AppContext.Provider
+            value={{ account, connectWallet, error }}
+        >
             {children}
-        </AccountContext.Provider>
+        </AppContext.Provider>
     );
 };
+
+export default AppProvider;

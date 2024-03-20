@@ -3,17 +3,17 @@
 import React from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@nextui-org/react";
 
-import { useAccount } from "@/context/context";
+// import { useAccount } from "@/context/context";
 
 export default function NavigationBar() {
-    const { account, connect, logout } = useAccount();
+    // const { account, connect, logout } = useAccount();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
     const menuItems = [
         { label: "Profile", href: "#", type: "link" },
         { label: "Dashboard", href: "#", type: "link" },
         // Kakvito drugi linkove imam
-        { label: "Log Out", type: "action", action: logout },
+        // { label: "Log Out", type: "action", action: logout },
     ];
 
 
@@ -47,15 +47,15 @@ export default function NavigationBar() {
                 </NavbarItem>
             </NavbarContent>
             <NavbarContent justify="end">
-                {/* <NavbarItem className="hidden lg:flex">
+                <NavbarItem className="hidden lg:flex">
                     <Link href="#">Login</Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Button as={Link} color="primary" href="#" variant="flat">
                         Sign Up
                     </Button>
-                </NavbarItem> */}
-                {!account && (
+                </NavbarItem>
+                {/* {!account && (
                     <NavbarItem>
                         <Button onClick={connect} color="primary">Connect Wallet</Button>
                     </NavbarItem>
@@ -69,10 +69,10 @@ export default function NavigationBar() {
                             <Button onClick={logout} color="error">Logout</Button>
                         </NavbarItem>
                     </>
-                )}
+                )} */}
             </NavbarContent>
             <NavbarMenu>
-                {menuItems.map((item, index) => {
+                {/* {menuItems.map((item, index) => {
                     if (item.type === "link") {
                         return (
                             <NavbarMenuItem key={`${item.label}-${index}`}>
@@ -102,7 +102,7 @@ export default function NavigationBar() {
                         );
                     }
                     return null; // For items that don't match the expected types
-                })}
+                })} */}
             </NavbarMenu>
 
         </Navbar>
