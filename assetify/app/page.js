@@ -8,18 +8,12 @@ export default function Home() {
   const { account, connectWallet, error } = useContext(AppContext);
 
 
-  // useEffect(() => {
-  //   console.log("signer: ", signer);
-  // }, [signer]);
+  useEffect(() => {
+    console.log("account: ", account);
+  }, [account]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {/* Conditionally render the account address if it exists */}
-      {/* {signer && (
-        <div className="text-center">
-          <p>Address: {signer.getAddress()}</p>
-        </div>
-      )} */}
 
       <div className="box">
         <h2>

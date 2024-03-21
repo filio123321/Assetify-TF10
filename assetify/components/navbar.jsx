@@ -1,13 +1,15 @@
 "use client"
 
-import React from "react";
+import React, { useContext } from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@nextui-org/react";
 
-// import { useAccount } from "@/context/context";
+import { AppContext } from "@/context/context";
+import ShortenText from "@/components/ShortenText";
 
 export default function NavigationBar() {
     // const { account, connect, logout } = useAccount();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const { account, connectWallet, error } = useContext(AppContext);
 
     const menuItems = [
         { label: "Profile", href: "#", type: "link" },
@@ -47,32 +49,33 @@ export default function NavigationBar() {
                 </NavbarItem>
             </NavbarContent>
             <NavbarContent justify="end">
-                <NavbarItem className="hidden lg:flex">
+                {/* <NavbarItem className="hidden lg:flex">
                     <Link href="#">Login</Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Button as={Link} color="primary" href="#" variant="flat">
                         Sign Up
                     </Button>
-                </NavbarItem>
-                {/* {!account && (
+                </NavbarItem> */}
+                {!account && (
                     <NavbarItem>
-                        <Button onClick={connect} color="primary">Connect Wallet</Button>
+                        <Button onClick={connectWallet} color="primary">
+                            Connect Wallet
+                        </Button>
                     </NavbarItem>
                 )}
                 {account && (
                     <>
                         <NavbarItem>
-                            <p>{account}</p>
-                        </NavbarItem>
-                        <NavbarItem>
-                            <Button onClick={logout} color="error">Logout</Button>
+                            <Button as={Link} color="primary" href="#" variant="flat">
+                                <ShortenText text={account} />
+                            </Button>
                         </NavbarItem>
                     </>
-                )} */}
+                )}
             </NavbarContent>
-            <NavbarMenu>
-                {/* {menuItems.map((item, index) => {
+            {/* <NavbarMenu>
+                {menuItems.map((item, index) => {
                     if (item.type === "link") {
                         return (
                             <NavbarMenuItem key={`${item.label}-${index}`}>
@@ -102,8 +105,8 @@ export default function NavigationBar() {
                         );
                     }
                     return null; // For items that don't match the expected types
-                })} */}
-            </NavbarMenu>
+                })}
+            </NavbarMenu> */}
 
         </Navbar>
     );
