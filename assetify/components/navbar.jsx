@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { useRouter, usePathname } from 'next/navigation'
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@nextui-org/react";
 
 import { AppContext } from "@/context/context";
@@ -10,6 +11,15 @@ export default function NavigationBar() {
     // const { account, connect, logout } = useAccount();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
     const { account, connectWallet, error } = useContext(AppContext);
+    const router = useRouter();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        console.log("router: ", router);
+        console.log("pathname: ", pathname);
+    }, [router, pathname]);
+
+    // current page for isActive buttons
 
     const menuItems = [
         { label: "Profile", href: "#", type: "link" },
@@ -27,23 +37,25 @@ export default function NavigationBar() {
                     className="sm:hidden"
                 />
                 <NavbarBrand>
-                    <p className="font-bold text-inherit">ACME</p>
+                    <p className="font-bold text-inherit">Assetify</p>
                 </NavbarBrand>
             </NavbarContent>
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
-                <NavbarItem>
-                    <Link color="foreground" href="#">
-                        Features
+                {/* <NavbarItem isActive={pathname === "/"}> */}
+                <NavbarItem {...(pathname === "/" ? { isActive: true } : {})}>
+                    <Link href="#" aria-current="page" {...(pathname === "/" ? {} : { color: "foreground" })}>
+                        Home
                     </Link>
                 </NavbarItem>
-                <NavbarItem isActive>
-                    <Link href="#" aria-current="page">
+                <NavbarItem {...(pathname === "/customers" ? { isActive: true } : {})}>
+                    {/* <Link href="#" aria-current="page"> */}
+                    <Link href="#" aria-current="page" {...(pathname === "/customers" ? {} : { color: "foreground" })}>
                         Customers
                     </Link>
                 </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" href="#">
+                <NavbarItem {...(pathname === "/integrations" ? { isActive: true } : {})}>
+                    <Link href="#" aria-current="page" {...(pathname === "/integrations" ? {} : { color: "foreground" })}>
                         Integrations
                     </Link>
                 </NavbarItem>
@@ -108,6 +120,6 @@ export default function NavigationBar() {
                 })}
             </NavbarMenu> */}
 
-        </Navbar>
+        </Navbar >
     );
 }
