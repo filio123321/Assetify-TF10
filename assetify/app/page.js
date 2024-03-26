@@ -2,7 +2,7 @@
 // import { useAccount } from "@/context/context";
 import { useEffect, useContext, useState } from "react";
 
-// import { AppContext } from "@/context/context";
+import { AppContext } from "@/context/context";
 
 import { ethers } from 'ethers'
 import { Counter__factory } from '@/generated/contract-types'
@@ -14,67 +14,23 @@ import { Textarea } from "@/components/ui/textarea"
 
 
 export default function Home() {
-  // const { account, connectWallet, error } = useContext(AppContext);
-
-
-  // useEffect(() => {
-  //   console.log("account: ", account);
-  // }, [account]);
-  const [address, setAddress] = useState()
-  const [balance, setBalance] = useState()
-  const [count, setCount] = useState(0)
-  const [number, setNumber] = useState(0)
-  const [time, setTime] = useState(Date.now())
-  const COUNTER_ADDRESS = '0x97d0d80Dc46D56EE7342b47BAd2211C23b509e78'
+  const {
+    account, connectWallet, error, balance, count,
+    refreshCounter, incrementCounter, setNumber
+  } = useContext(AppContext);
 
 
   useEffect(() => {
-    const interval = setInterval(() => setTime(Date.now()), 5000)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
+    console.log("account: ", account);
+  }, [account]);
 
-  useEffect(() => {
-    const provider = new ethers.providers.StaticJsonRpcProvider()
-    const counter = Counter__factory.connect(COUNTER_ADDRESS, provider)
-    if (counter) {
-      counter.number().then((count) => {
-        setCount(count.toNumber())
-      })
-    }
-  }, [time])
+  // const [address, setAddress] = useState()
+  // const [balance, setBalance] = useState()
+  // const [count, setCount] = useState(0)
+  const [_number, _setNumber] = useState(0)
+  // const [time, setTime] = useState(Date.now())
+  // const COUNTER_ADDRESS = '0x97d0d80Dc46D56EE7342b47BAd2211C23b509e78'
 
-  const handleConnectWallet = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    await provider.send('eth_requestAccounts', [])
-    const signer = provider.getSigner()
-    setAddress(await signer.getAddress())
-    setBalance(ethers.utils.formatEther(await signer.getBalance()))
-  }
-
-  const handleRefresh = async () => {
-    const provider = new ethers.providers.StaticJsonRpcProvider()
-    const counter = Counter__factory.connect(COUNTER_ADDRESS, provider)
-    const n = await counter.number()
-    setCount(n.toNumber())
-  }
-
-  const handleIncrement = async () => {
-    console.log('increment')
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const signer = await provider.getSigner()
-    const counter = Counter__factory.connect(COUNTER_ADDRESS, signer)
-    await counter.increment()
-  }
-
-  const handleSetNumber = async () => {
-    console.log('set number')
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const signer = await provider.getSigner()
-    const contract = Counter__factory.connect(COUNTER_ADDRESS, signer)
-    await contract.setNumber(number)
-  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -97,23 +53,23 @@ export default function Home() {
         {error && <p className={`error shadow-border`}>{`Error: ${error}`}</p>} */}
 
         {
-          address ? (
+          account ? (
             <>
-              <div>{address}</div>
+              <div>{account}</div>
               <div>{balance}</div>
             </>
           ) : (
-            <Button onClick={handleConnectWallet}>Connect Wallet</Button>
+            <Button onClick={connectWallet}>Connect Wallet</Button>
           )
         }
 
         <div className="text-3xl font-bold">Counter {count}</div>
-        <Button color="light" onClick={handleRefresh}>
+        <Button color="light" onClick={refreshCounter}>
           Refresh Counter
         </Button>
 
         <div>
-          <Button onClick={handleIncrement}>Increment Counter</Button>
+          <Button onClick={incrementCounter}>Increment Counter</Button>
         </div>
 
         <div>
@@ -125,13 +81,13 @@ export default function Home() {
               id="number"
               type="number"
               placeholder="Enter number"
-              value={number}
+              value={_number}
               required={true}
-              onChange={(e) => setNumber(parseInt(e.target.value))}
+              onChange={(e) => { _setNumber(parseInt(e.target.value)) }}
             />
           </div>
 
-          <Button type="submit" onClick={handleSetNumber}>
+          <Button onClick={() => setNumber(_number)}>
             Submit
           </Button>
         </div>
