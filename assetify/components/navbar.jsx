@@ -10,8 +10,10 @@ import ShortenText from "@/components/ShortenText";
 export default function NavigationBar() {
     // const { account, connect, logout } = useAccount();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const { account, connectWallet, error } = useContext(AppContext);
-    const router = useRouter();
+    const {
+        account, connectWallet, error, balance, count,
+        refreshCounter, incrementCounter, setNumber
+    } = useContext(AppContext); const router = useRouter();
     const pathname = usePathname();
 
     useEffect(() => {

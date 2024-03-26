@@ -4,9 +4,6 @@ import { useEffect, useContext, useState } from "react";
 
 import { AppContext } from "@/context/context";
 
-import { ethers } from 'ethers'
-import { Counter__factory } from '@/generated/contract-types'
-
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from "@/components/ui/textarea"
