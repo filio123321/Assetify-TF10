@@ -24,6 +24,7 @@ export default function NavigationBar() {
     // current page for isActive buttons
 
     const menuItems = [
+        { label: "Home", href: "/", type: "link" },
         { label: "Profile", href: "#", type: "link" },
         { label: "Dashboard", href: "#", type: "link" },
         // Kakvito drugi linkove imam
@@ -46,7 +47,7 @@ export default function NavigationBar() {
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 {/* <NavbarItem isActive={pathname === "/"}> */}
                 <NavbarItem {...(pathname === "/" ? { isActive: true } : {})}>
-                    <Link href="#" aria-current="page" {...(pathname === "/" ? {} : { color: "foreground" })}>
+                    <Link href="/" aria-current="page" {...(pathname === "/" ? {} : { color: "foreground" })}>
                         Home
                     </Link>
                 </NavbarItem>
