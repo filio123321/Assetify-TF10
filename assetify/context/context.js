@@ -1,18 +1,21 @@
 'use client'
 import React, { createContext, useState, useEffect } from "react";
 import { ethers } from 'ethers';
-import { Counter__factory } from '@/generated/contract-types';
+import { Assetify__factory } from '@/generated/contract-types';
 
 export const AppContext = createContext();
 
 const { ethereum } = typeof window !== "undefined" ? window : {};
-const COUNTER_ADDRESS = '0x97d0d80Dc46D56EE7342b47BAd2211C23b509e78';
+const ASSETIFY_ADDRESS = '0x4601f2d1735aD612B12fd7913a03360786daAaf9';
 
 const AppProvider = ({ children }) => {
     const [account, setAccount] = useState("");
     const [balance, setBalance] = useState("");
-    const [count, setCount] = useState(0);
+    // const [count, setCount] = useState(0);
     const [error, setError] = useState("");
+
+
+
 
     // Check for MetaMask
     const checkEthereumExists = () => {
@@ -56,39 +59,79 @@ const AppProvider = ({ children }) => {
         }
     };
 
-    // Refresh counter
-    const refreshCounter = async () => {
-        const provider = new ethers.providers.StaticJsonRpcProvider();
-        const counter = Counter__factory.connect(COUNTER_ADDRESS, provider);
-        const n = await counter.number();
-        setCount(n.toNumber());
-    };
+    // // Refresh counter
+    // const refreshCounter = async () => {
+    //     const provider = new ethers.providers.StaticJsonRpcProvider();
+    //     const counter = Counter__factory.connect(COUNTER_ADDRESS, provider);
+    //     const n = await counter.number();
+    //     setCount(n.toNumber());
+    // };
 
-    // Increment counter
-    const incrementCounter = async () => {
+    // // Increment counter
+    // const incrementCounter = async () => {
+    //     if (!account) return; // Ensure user is connected
+    //     const provider = new ethers.providers.Web3Provider(ethereum);
+    //     const signer = await provider.getSigner();
+    //     const counter = Counter__factory.connect(COUNTER_ADDRESS, signer);
+    //     await counter.increment();
+    //     await refreshCounter(); // Refresh counter state after increment
+    // };
+
+    // // Set number
+    // const setNumber = async (number) => {
+    //     if (!account) return; // Ensure user is connected
+    //     const provider = new ethers.providers.Web3Provider(ethereum);
+    //     const signer = await provider.getSigner();
+    //     const counter = Counter__factory.connect(COUNTER_ADDRESS, signer);
+    //     await counter.setNumber(number);
+    //     await refreshCounter(); // Refresh counter state after setting number
+    // };
+
+    const createAsset = async (name, totalShares, pricePerShare) => {
         if (!account) return; // Ensure user is connected
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = await provider.getSigner();
-        const counter = Counter__factory.connect(COUNTER_ADDRESS, signer);
-        await counter.increment();
-        await refreshCounter(); // Refresh counter state after increment
+        try {
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const signer = await provider.getSigner();
+            const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
+            const tx = await assetify.createAsset(name, totalShares, ethers.utils.parseEther(pricePerShare.toString()));
+            await tx.wait();
+            console.log("Asset created successfully");
+        } catch (err) {
+            console.error("Error creating asset:", err);
+            setError(err.message || "Failed to create asset");
+        }
     };
 
-    // Set number
-    const setNumber = async (number) => {
-        if (!account) return; // Ensure user is connected
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = await provider.getSigner();
-        const counter = Counter__factory.connect(COUNTER_ADDRESS, signer);
-        await counter.setNumber(number);
-        await refreshCounter(); // Refresh counter state after setting number
+    // Function to fetch all assets
+    const fetchAllAssets = async () => {
+        if (!ethereum) return; // Ensure Ethereum object is available
+        try {
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, provider);
+            const assets = await assetify.getAllAssets();
+            // Convert BigNumber and address values to strings for easy display
+            const decodedAssets = assets.map(asset => ({
+                name: asset.name,
+                totalShares: asset.totalShares.toString(),
+                sharesAvailable: asset.sharesAvailable.toString(),
+                pricePerShare: ethers.utils.formatEther(asset.pricePerShare),
+                owner: asset.owner
+            }));
+            return decodedAssets;
+        } catch (err) {
+            console.error("Error fetching assets:", err);
+            setError(err.message || "Failed to fetch assets");
+        }
     };
 
+
+
+    // Initial setup
     useEffect(() => {
         if (checkEthereumExists()) {
             ethereum.on("accountsChanged", getConnectedAccounts);
             getConnectedAccounts();
-            refreshCounter(); // Initial counter state fetch
+            // refreshCounter(); // Initial counter state fetch
         }
         return () => {
             if (ethereum) {
@@ -99,7 +142,8 @@ const AppProvider = ({ children }) => {
 
     return (
         <AppContext.Provider value={{
-            account, connectWallet, error, balance, count, refreshCounter, incrementCounter, setNumber
+            // account, connectWallet, error, balance, count, refreshCounter, incrementCounter, setNumber
+            account, connectWallet, error, balance, createAsset, fetchAllAssets
         }}>
             {children}
         </AppContext.Provider>

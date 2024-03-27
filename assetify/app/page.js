@@ -16,39 +16,12 @@ export default function Home() {
     refreshCounter, incrementCounter, setNumber
   } = useContext(AppContext);
 
-
-  useEffect(() => {
-    console.log("account: ", account);
-  }, [account]);
-
-  // const [address, setAddress] = useState()
-  // const [balance, setBalance] = useState()
-  // const [count, setCount] = useState(0)
   const [_number, _setNumber] = useState(0)
-  // const [time, setTime] = useState(Date.now())
-  // const COUNTER_ADDRESS = '0x97d0d80Dc46D56EE7342b47BAd2211C23b509e78'
 
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="box" >
-
-        {/* 
-        <h2>
-          MetaMask <span className="block">Connect.</span>
-        </h2>
-
-        {account ? (
-          <div className="account-box">
-            <p className="shadow-border">{account}</p>
-          </div>
-        ) : (
-          <button className="btn shadow-border" onClick={connectWallet}>
-            Connect
-          </button>
-        )}
-        {error && <p className={`error shadow-border`}>{`Error: ${error}`}</p>} */}
-
         {
           account ? (
             <>
