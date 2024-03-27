@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 
 export default function CreateListing() {
     const {
-        account, connectWallet, error, balance, createAsset, fetchAllAssets
+        account, connectWallet, error, balance, createAsset, fetchAllAssets, buyShares, sellShares
     } = useContext(AppContext);
 
     // For Assetify
@@ -19,6 +19,9 @@ export default function CreateListing() {
     const [totalShares, setTotalShares] = useState(0);
     const [pricePerShare, setPricePerShare] = useState('');
     const [assets, setAssets] = useState([]);
+    const [_buyShares, _setBuyShares] = useState({}); // Object to store buy shares for each asset
+    const [_sellShares, _setSellShares] = useState({});
+
 
     useEffect(() => {
         const loadAssets = async () => {
@@ -47,6 +50,9 @@ export default function CreateListing() {
                 }
             </div>
 
+            {/* error */}
+            {error && <div>{error}</div>}
+
             <div>
                 <div>
                     <Label htmlFor="assetName" value="Asset Name" />
@@ -71,6 +77,18 @@ export default function CreateListing() {
                         <div>Shares Available: {asset.sharesAvailable}</div>
                         <div>Price Per Share: {asset.pricePerShare} ETH</div>
                         <div>Owner: {asset.owner}</div>
+
+                        <div>
+                            <Label htmlFor={`buyShares-${index}`} value="Buy Shares" />
+                            <Textarea id={`buyShares-${index}`} placeholder="Number of shares to buy" type="number" required={true} onChange={(e) => _setBuyShares({ ..._buyShares, [index]: e.target.value })} />
+                            <Button onClick={() => buyShares(index, _buyShares[index], asset.pricePerShare * _buyShares[index])}>Buy</Button>
+                        </div>
+
+                        <div>
+                            <Label htmlFor={`sellShares-${index}`} value="Sell Shares" />
+                            <Textarea id={`sellShares-${index}`} placeholder="Number of shares to sell" type="number" required={true} onChange={(e) => _setSellShares({ ..._sellShares, [index]: e.target.value })} />
+                            <Button onClick={() => sellShares(index, _sellShares[index])}>Sell</Button>
+                        </div>
                     </div>
                 ))}
             </div>

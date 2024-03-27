@@ -124,6 +124,38 @@ const AppProvider = ({ children }) => {
         }
     };
 
+    const buyShares = async (assetId, sharesToBuy, value) => {
+        if (!account) return; // Ensure user is connected
+        try {
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const signer = await provider.getSigner();
+            const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
+            const tx = await assetify.buyShares(assetId, sharesToBuy, { value: ethers.utils.parseEther(value.toString()) });
+            await tx.wait();
+            console.log("Shares bought successfully");
+        } catch (err) {
+            console.error("Error buying shares:", err);
+            setError(err.message || "Failed to buy shares");
+        }
+    };
+
+    // Function to sell shares
+    const sellShares = async (assetId, sharesToSell) => {
+        if (!account) return; // Ensure user is connected
+        try {
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const signer = await provider.getSigner();
+            const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
+            const tx = await assetify.sellShares(assetId, sharesToSell);
+            await tx.wait();
+            console.log("Shares sold successfully");
+        } catch (err) {
+            console.error("Error selling shares:", err);
+            setError(err.message || "Failed to sell shares");
+        }
+    };
+
+
 
 
     // Initial setup
@@ -143,7 +175,7 @@ const AppProvider = ({ children }) => {
     return (
         <AppContext.Provider value={{
             // account, connectWallet, error, balance, count, refreshCounter, incrementCounter, setNumber
-            account, connectWallet, error, balance, createAsset, fetchAllAssets
+            account, connectWallet, error, balance, createAsset, fetchAllAssets, buyShares, sellShares
         }}>
             {children}
         </AppContext.Provider>
