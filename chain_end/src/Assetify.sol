@@ -8,6 +8,7 @@ contract Assetify {
         uint256 sharesAvailable;
         uint256 pricePerShare;
         address owner;
+        string[] ipfsHashes;
     }
 
     Asset[] public assets;
@@ -15,11 +16,12 @@ contract Assetify {
     // Mapping from asset ID to owner address to number of shares owned
     mapping(uint256 => mapping(address => uint256)) public assetShares;
 
-    event AssetCreated(uint256 indexed assetId, string name, uint256 totalShares, uint256 pricePerShare);
+    event AssetCreated(uint256 indexed assetId, string name, uint256 totalShares, uint256 pricePerShare, string[] ipfsHashes);
     event SharesPurchased(uint256 indexed assetId, address buyer, uint256 amount, uint256 newPricePerShare);
     event SharesSold(uint256 indexed assetId, address seller, uint256 amount, uint256 newPricePerShare);
+    event ImageAdded(uint256 indexed assetId, string ipfsHash);
 
-    function createAsset(string memory name, uint256 totalShares, uint256 pricePerShare) public {
+    function createAsset(string memory name, uint256 totalShares, uint256 pricePerShare, string[] memory ipfsHashes) public {
         require(totalShares > 0, "Total shares must be greater than zero");
         require(pricePerShare > 0, "Price per share must be greater than zero");
 
@@ -28,11 +30,12 @@ contract Assetify {
             totalShares: totalShares,
             sharesAvailable: totalShares,
             pricePerShare: pricePerShare,
-            owner: msg.sender
+            owner: msg.sender,
+            ipfsHashes: ipfsHashes
         }));
 
         uint256 assetId = assets.length - 1;
-        emit AssetCreated(assetId, name, totalShares, pricePerShare);
+        emit AssetCreated(assetId, name, totalShares, pricePerShare, ipfsHashes);
     }
 
     function buyShares(uint256 assetId, uint256 sharesToBuy) public payable {
@@ -70,7 +73,6 @@ contract Assetify {
         emit SharesSold(assetId, msg.sender, sharesToSell, asset.pricePerShare);
     }
 
-
     function getCurrentPrice(uint256 assetId) public view returns (uint256) {
         require(assetId < assets.length, "Asset does not exist");
         return assets[assetId].pricePerShare;
@@ -99,6 +101,21 @@ contract Assetify {
         }
 
         return (ids, shares);
+    }
+
+    // Function to add more images to an asset
+    function addAssetImage(uint256 assetId, string memory ipfsHash) public {
+        require(assetId < assets.length, "Asset does not exist");
+        require(msg.sender == assets[assetId].owner, "Only asset owner can add images");
+
+        assets[assetId].ipfsHashes.push(ipfsHash);
+        emit ImageAdded(assetId, ipfsHash);
+    }
+
+    // function to get IPFS hashes for an asset
+    function getAssetImages(uint256 assetId) public view returns (string[] memory) {
+        require(assetId < assets.length, "Asset does not exist");
+        return assets[assetId].ipfsHashes;
     }
 
 }

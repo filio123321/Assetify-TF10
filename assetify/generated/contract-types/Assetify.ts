@@ -34,6 +34,7 @@ export declare namespace Assetify {
     sharesAvailable: BigNumberish;
     pricePerShare: BigNumberish;
     owner: string;
+    ipfsHashes: string[];
   };
 
   export type AssetStructOutput = [
@@ -41,23 +42,27 @@ export declare namespace Assetify {
     BigNumber,
     BigNumber,
     BigNumber,
-    string
+    string,
+    string[]
   ] & {
     name: string;
     totalShares: BigNumber;
     sharesAvailable: BigNumber;
     pricePerShare: BigNumber;
     owner: string;
+    ipfsHashes: string[];
   };
 }
 
 export interface AssetifyInterface extends utils.Interface {
   functions: {
+    "addAssetImage(uint256,string)": FunctionFragment;
     "assetShares(uint256,address)": FunctionFragment;
     "assets(uint256)": FunctionFragment;
     "buyShares(uint256,uint256)": FunctionFragment;
-    "createAsset(string,uint256,uint256)": FunctionFragment;
+    "createAsset(string,uint256,uint256,string[])": FunctionFragment;
     "getAllAssets()": FunctionFragment;
+    "getAssetImages(uint256)": FunctionFragment;
     "getCurrentPrice(uint256)": FunctionFragment;
     "getUserPortfolio(address)": FunctionFragment;
     "getUserShares(uint256,address)": FunctionFragment;
@@ -66,17 +71,23 @@ export interface AssetifyInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "addAssetImage"
       | "assetShares"
       | "assets"
       | "buyShares"
       | "createAsset"
       | "getAllAssets"
+      | "getAssetImages"
       | "getCurrentPrice"
       | "getUserPortfolio"
       | "getUserShares"
       | "sellShares"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "addAssetImage",
+    values: [BigNumberish, string]
+  ): string;
   encodeFunctionData(
     functionFragment: "assetShares",
     values: [BigNumberish, string]
@@ -91,11 +102,15 @@ export interface AssetifyInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "createAsset",
-    values: [string, BigNumberish, BigNumberish]
+    values: [string, BigNumberish, BigNumberish, string[]]
   ): string;
   encodeFunctionData(
     functionFragment: "getAllAssets",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAssetImages",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getCurrentPrice",
@@ -115,6 +130,10 @@ export interface AssetifyInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(
+    functionFragment: "addAssetImage",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "assetShares",
     data: BytesLike
   ): Result;
@@ -126,6 +145,10 @@ export interface AssetifyInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getAllAssets",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getAssetImages",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -143,12 +166,14 @@ export interface AssetifyInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "sellShares", data: BytesLike): Result;
 
   events: {
-    "AssetCreated(uint256,string,uint256,uint256)": EventFragment;
+    "AssetCreated(uint256,string,uint256,uint256,string[])": EventFragment;
+    "ImageAdded(uint256,string)": EventFragment;
     "SharesPurchased(uint256,address,uint256,uint256)": EventFragment;
     "SharesSold(uint256,address,uint256,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "AssetCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ImageAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SharesPurchased"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SharesSold"): EventFragment;
 }
@@ -158,13 +183,25 @@ export interface AssetCreatedEventObject {
   name: string;
   totalShares: BigNumber;
   pricePerShare: BigNumber;
+  ipfsHashes: string[];
 }
 export type AssetCreatedEvent = TypedEvent<
-  [BigNumber, string, BigNumber, BigNumber],
+  [BigNumber, string, BigNumber, BigNumber, string[]],
   AssetCreatedEventObject
 >;
 
 export type AssetCreatedEventFilter = TypedEventFilter<AssetCreatedEvent>;
+
+export interface ImageAddedEventObject {
+  assetId: BigNumber;
+  ipfsHash: string;
+}
+export type ImageAddedEvent = TypedEvent<
+  [BigNumber, string],
+  ImageAddedEventObject
+>;
+
+export type ImageAddedEventFilter = TypedEventFilter<ImageAddedEvent>;
 
 export interface SharesPurchasedEventObject {
   assetId: BigNumber;
@@ -219,6 +256,12 @@ export interface Assetify extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    addAssetImage(
+      assetId: BigNumberish,
+      ipfsHash: string,
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
+
     assetShares(
       arg0: BigNumberish,
       arg1: string,
@@ -248,12 +291,18 @@ export interface Assetify extends BaseContract {
       name: string,
       totalShares: BigNumberish,
       pricePerShare: BigNumberish,
+      ipfsHashes: string[],
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     getAllAssets(
       overrides?: CallOverrides
     ): Promise<[Assetify.AssetStructOutput[]]>;
+
+    getAssetImages(
+      assetId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string[]]>;
 
     getCurrentPrice(
       assetId: BigNumberish,
@@ -277,6 +326,12 @@ export interface Assetify extends BaseContract {
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
   };
+
+  addAssetImage(
+    assetId: BigNumberish,
+    ipfsHash: string,
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
 
   assetShares(
     arg0: BigNumberish,
@@ -307,12 +362,18 @@ export interface Assetify extends BaseContract {
     name: string,
     totalShares: BigNumberish,
     pricePerShare: BigNumberish,
+    ipfsHashes: string[],
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   getAllAssets(
     overrides?: CallOverrides
   ): Promise<Assetify.AssetStructOutput[]>;
+
+  getAssetImages(
+    assetId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string[]>;
 
   getCurrentPrice(
     assetId: BigNumberish,
@@ -337,6 +398,12 @@ export interface Assetify extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    addAssetImage(
+      assetId: BigNumberish,
+      ipfsHash: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     assetShares(
       arg0: BigNumberish,
       arg1: string,
@@ -366,12 +433,18 @@ export interface Assetify extends BaseContract {
       name: string,
       totalShares: BigNumberish,
       pricePerShare: BigNumberish,
+      ipfsHashes: string[],
       overrides?: CallOverrides
     ): Promise<void>;
 
     getAllAssets(
       overrides?: CallOverrides
     ): Promise<Assetify.AssetStructOutput[]>;
+
+    getAssetImages(
+      assetId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string[]>;
 
     getCurrentPrice(
       assetId: BigNumberish,
@@ -397,18 +470,29 @@ export interface Assetify extends BaseContract {
   };
 
   filters: {
-    "AssetCreated(uint256,string,uint256,uint256)"(
+    "AssetCreated(uint256,string,uint256,uint256,string[])"(
       assetId?: BigNumberish | null,
       name?: null,
       totalShares?: null,
-      pricePerShare?: null
+      pricePerShare?: null,
+      ipfsHashes?: null
     ): AssetCreatedEventFilter;
     AssetCreated(
       assetId?: BigNumberish | null,
       name?: null,
       totalShares?: null,
-      pricePerShare?: null
+      pricePerShare?: null,
+      ipfsHashes?: null
     ): AssetCreatedEventFilter;
+
+    "ImageAdded(uint256,string)"(
+      assetId?: BigNumberish | null,
+      ipfsHash?: null
+    ): ImageAddedEventFilter;
+    ImageAdded(
+      assetId?: BigNumberish | null,
+      ipfsHash?: null
+    ): ImageAddedEventFilter;
 
     "SharesPurchased(uint256,address,uint256,uint256)"(
       assetId?: BigNumberish | null,
@@ -438,6 +522,12 @@ export interface Assetify extends BaseContract {
   };
 
   estimateGas: {
+    addAssetImage(
+      assetId: BigNumberish,
+      ipfsHash: string,
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
+
     assetShares(
       arg0: BigNumberish,
       arg1: string,
@@ -456,10 +546,16 @@ export interface Assetify extends BaseContract {
       name: string,
       totalShares: BigNumberish,
       pricePerShare: BigNumberish,
+      ipfsHashes: string[],
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     getAllAssets(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getAssetImages(
+      assetId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getCurrentPrice(
       assetId: BigNumberish,
@@ -485,6 +581,12 @@ export interface Assetify extends BaseContract {
   };
 
   populateTransaction: {
+    addAssetImage(
+      assetId: BigNumberish,
+      ipfsHash: string,
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
+
     assetShares(
       arg0: BigNumberish,
       arg1: string,
@@ -506,10 +608,16 @@ export interface Assetify extends BaseContract {
       name: string,
       totalShares: BigNumberish,
       pricePerShare: BigNumberish,
+      ipfsHashes: string[],
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     getAllAssets(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getAssetImages(
+      assetId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getCurrentPrice(
       assetId: BigNumberish,

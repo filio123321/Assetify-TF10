@@ -6,7 +6,7 @@ import { Assetify__factory } from '@/generated/contract-types';
 export const AppContext = createContext();
 
 const { ethereum } = typeof window !== "undefined" ? window : {};
-const ASSETIFY_ADDRESS = '0x4601f2d1735aD612B12fd7913a03360786daAaf9';
+const ASSETIFY_ADDRESS = '0x6EcC14C51561657B929E25F50c3B3bC22F1Aa0De';
 
 const AppProvider = ({ children }) => {
     const [account, setAccount] = useState("");
@@ -59,41 +59,15 @@ const AppProvider = ({ children }) => {
         }
     };
 
-    // // Refresh counter
-    // const refreshCounter = async () => {
-    //     const provider = new ethers.providers.StaticJsonRpcProvider();
-    //     const counter = Counter__factory.connect(COUNTER_ADDRESS, provider);
-    //     const n = await counter.number();
-    //     setCount(n.toNumber());
-    // };
 
-    // // Increment counter
-    // const incrementCounter = async () => {
-    //     if (!account) return; // Ensure user is connected
-    //     const provider = new ethers.providers.Web3Provider(ethereum);
-    //     const signer = await provider.getSigner();
-    //     const counter = Counter__factory.connect(COUNTER_ADDRESS, signer);
-    //     await counter.increment();
-    //     await refreshCounter(); // Refresh counter state after increment
-    // };
-
-    // // Set number
-    // const setNumber = async (number) => {
-    //     if (!account) return; // Ensure user is connected
-    //     const provider = new ethers.providers.Web3Provider(ethereum);
-    //     const signer = await provider.getSigner();
-    //     const counter = Counter__factory.connect(COUNTER_ADDRESS, signer);
-    //     await counter.setNumber(number);
-    //     await refreshCounter(); // Refresh counter state after setting number
-    // };
-
-    const createAsset = async (name, totalShares, pricePerShare) => {
-        if (!account) return; // Ensure user is connected
+    const createAsset = async (name, totalShares, pricePerShare, ipfsHashes) => {
+        if (!account) return; // En§sure user is connected
         try {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const signer = await provider.getSigner();
             const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
-            const tx = await assetify.createAsset(name, totalShares, ethers.utils.parseEther(pricePerShare.toString()));
+            console.log("Type of ipfsHashes: ", typeof ipfsHashes);
+            const tx = await assetify.createAsset(name, totalShares, ethers.utils.parseEther(pricePerShare.toString()), ipfsHashes);
             await tx.wait();
             console.log("Asset created successfully");
         } catch (err) {
@@ -115,7 +89,8 @@ const AppProvider = ({ children }) => {
                 totalShares: asset.totalShares.toString(),
                 sharesAvailable: asset.sharesAvailable.toString(),
                 pricePerShare: ethers.utils.formatEther(asset.pricePerShare),
-                owner: asset.owner
+                owner: asset.owner,
+                ipfsHashes: asset.ipfsHashes
             }));
             return decodedAssets;
         } catch (err) {

@@ -1,14 +1,11 @@
-"use client"
-
+'use client'
 import { useContext, useState, useEffect } from "react";
-import { useStorageUpload } from "@thirdweb-dev/react"; // Import useStorageUpload hook
 
 import { AppContext } from "@/context/context";
 
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input"
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Textarea } from "@/components/ui/textarea"
 
 
 
@@ -22,8 +19,9 @@ export default function CreateListing() {
     const [totalShares, setTotalShares] = useState(0);
     const [pricePerShare, setPricePerShare] = useState('');
     const [assets, setAssets] = useState([]);
+    const [_buyShares, _setBuyShares] = useState({}); // Object to store buy shares for each asset
+    const [_sellShares, _setSellShares] = useState({});
 
-    const { mutateAsync: upload } = useStorageUpload(); // Use the upload function from useStorageUpload
 
     useEffect(() => {
         const loadAssets = async () => {
@@ -31,59 +29,47 @@ export default function CreateListing() {
             setAssets(fetchedAssets || []);
         };
 
-        if (account) {
+        if (account) { // Ensure assets are fetched only if an account is connected
             loadAssets();
         }
-    }, [account]);
+    }, [account]); // Re-fetch assets whenever the account changes
 
-    // const uploadToIPFS = async (image) => {
-    //     const uploadUrl = await upload({
-    //         data: [image],
-    //         options: {
-    //             uploadWithGatewayUrl: true,
-    //             uploadWithoutDirectory: true,
-    //         },
-    //     })
-
-    //     return uploadUrl;
-    // }
 
     const handleSubmit = async () => {
+        const formData = new FormData();
         const images = document.getElementById('images').files;
+        for (let i = 0; i < images.length; i++) {
+            formData.append('file', images[i]);
+        }
+
         try {
-            console.log('---\nTrying to upload images to IPFS');
+            console.log('---\nTrying to upload images: ');
+            console.log('formData: ', formData);
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+            
+            console.log('---');
 
-            // Asynchronously prepare data for IPFS upload
-            const dataToUpload = await Promise.all(Array.from(images).map(async (file) => {
-                return {
-                    name: file.name,
-                    type: file.type,
-                    buffer: await file.arrayBuffer() // Correctly await the arrayBuffer call
-                };
-            }));
-
-            // Upload the data to IPFS
-            const ipfsHashes = await upload({ data: dataToUpload });
-            // let ipfsHashes = [];
-            // for (let i = 0; i < dataToUpload.length; i++) {
-            //     const uploadUrl = await uploadToIPFS(dataToUpload[i]);
-            //     ipfsHashes.push(uploadUrl);
-            // }
+            // Call your API route for image upload
+            const uploadResponse = await fetch('/api/upload-images', {
+                method: 'POST',
+                body: formData, // FormData will be correctly sent as 'multipart/form-data'
+            });
+            const { ipfsHashes } = await uploadResponse.json();
             console.log('Successfully uploaded images. IPFS hashes: ', ipfsHashes);
 
-            // create an arry of IPFS URIs
-            const ipfsHashesArray = Object.values(ipfsHashes);
-            // Proceed to create the asset with the returned IPFS URIs
-            await createAsset(assetName, totalShares, pricePerShare, ipfsHashesArray);
+            // Proceed to create the asset with the returned IPFS hashes
+            await createAsset(assetName, totalShares, pricePerShare, ipfsHashes);
         } catch (error) {
-            console.error('Failed to upload images to IPFS or create asset:', error);
+            console.error('Failed to upload images or create asset:', error);
         }
     };
 
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <div className="box">
+            <div className="box" >
                 {
                     account ? (
                         <>
@@ -96,11 +82,10 @@ export default function CreateListing() {
                 }
             </div>
 
-            {/* Error */}
+            {/* error */}
             {error && <div>{error}</div>}
 
             <div>
-                {/* Asset Creation Form */}
                 <div>
                     <Label htmlFor="assetName" value="Asset Name" />
                     <Textarea id="assetName" placeholder="Enter asset name" value={assetName} onChange={(e) => setAssetName(e.target.value)} />
@@ -115,11 +100,11 @@ export default function CreateListing() {
                 </div>
                 <div>
                     <Label htmlFor="images" value="Images" />
-                    {/* <input type="file" id="images" multiple /> */}
-                    <Input type="file" id="images" multiple />
+                    <input type="file" id="images" multiple />
                 </div>
+                {/* <Button onClick={() => createAsset(assetName, totalShares, pricePerShare)}>Create Asset</Button> */}
                 <Button onClick={handleSubmit}>Create Asset</Button>
             </div>
-        </main>
+        </main >
     );
 }

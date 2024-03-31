@@ -20,7 +20,7 @@ contract AssetifyScript is Script {
         string memory name = "Real Estate Investment";
         uint256 totalShares = 1000;
         uint256 pricePerShare = 1 ether;
-        assetify.createAsset(name, totalShares, pricePerShare);
+        assetify.createAsset(name, totalShares, pricePerShare, new string[](0));
         // console.log("Asset created:", name, totalShares, "shares at", pricePerShare, "wei per share");
 
         // Buy shares of the newly created asset

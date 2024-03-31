@@ -21,7 +21,7 @@ contract AssetifyTest is Test {
         string memory name = "Test Asset";
         uint256 totalShares = 1000;
         uint256 pricePerShare = 1 ether;
-        assetify.createAsset(name, totalShares, pricePerShare);
+        assetify.createAsset(name, totalShares, pricePerShare, new string[](0));
 
         // Verify the asset is created correctly
         (string memory assetName, uint256 shares, uint256 sharesAvailable, uint256 price, ) = assetify.assets(0);
@@ -70,5 +70,5 @@ contract AssetifyTest is Test {
     // Additional tests can be written for checking price adjustments,
     // user portfolios, and other functionalities as needed.
 
-    
+
 }
