@@ -23,7 +23,7 @@ export default function CreateListing() {
     const [pricePerShare, setPricePerShare] = useState('');
     const [assets, setAssets] = useState([]);
 
-    const { mutateAsync: upload } = useStorageUpload(); // Use the upload function from useStorageUpload
+    const { mutateAsync: upload } = useStorageUpload();
 
     useEffect(() => {
         const loadAssets = async () => {
@@ -36,18 +36,6 @@ export default function CreateListing() {
         }
     }, [account]);
 
-    // const uploadToIPFS = async (image) => {
-    //     const uploadUrl = await upload({
-    //         data: [image],
-    //         options: {
-    //             uploadWithGatewayUrl: true,
-    //             uploadWithoutDirectory: true,
-    //         },
-    //     })
-
-    //     return uploadUrl;
-    // }
-
     const handleSubmit = async () => {
         const images = document.getElementById('images').files;
         try {
@@ -55,51 +43,37 @@ export default function CreateListing() {
 
             // Asynchronously prepare data for IPFS upload
             const dataToUpload = await Promise.all(Array.from(images).map(async (file) => {
-                const fileExtension = file.name.split('.').pop();
-                return {
-                    name: `image.${fileExtension}`,
-                    type: file.type,
-                    buffer: await file.arrayBuffer(), // Correctly await the arrayBuffer call
-                    image: file
-                };
+                // const fileExtension = file.name.split('.').pop();
+                // return {
+                //     name: `image.${fileExtension}`,
+                //     type: file.type,
+                //     buffer: await file.arrayBuffer(), // Correctly await the arrayBuffer call
+                //     image: file
+                // };
+
+                return file;
             }));
-
-
-
-            // BI TRQBVALO NA BACHKA?
-            // PROBLEMUT E CHE CHE NE SE KACVHA FILE-A (OTGORE E PROBLEMA NAI VEROQTNO), AKO NE STANE NISHTO
-            // NAI-DOBRE DA NAPRAVQ EDIN API ROUTE NA SAMIQ MI PROEKT
-
-            // TRQBVA DA TESTVAM
-
-
-
-            // Example: Upload an array of JSON objects
-            // const objects = [
-            //     { name: "JSON 1", image: files[0] },
-            //     { name: "JSON 2", image: files[1] },
-            // ];
-
-            // Upload to IPFS, like the example above
-            
 
             // Upload the data to IPFS
             const ipfsHashes = await upload({ data: dataToUpload });
 
-            let ipfsHashesFinal = [];
-            for (let i = 0; i < ipfsHashes.length; i++) {
-                ipfsHashesFinal.push(ipfsHashes[i].image);
-            }
-            console.log('Successfully uploaded images. IPFS hashes: ', ipfsHashesFinal);
+            // let ipfsHashesFinal = [];
+            // for (let i = 0; i < ipfsHashes.length; i++) {
+            //     console.log('IPFS hash:', JSON.stringify(ipfsHashes[i]));
+            //     ipfsHashesFinal.push(ipfsHashes[i].image);
+            // }
+            // console.log('Successfully uploaded images. IPFS hashes: ', ipfsHashesFinal);
 
+            // throw new Error('Failed to upload images to IPFS or create asset:');
             // create an arry of IPFS URIs
-            const ipfsHashesArray = Object.values(ipfsHashesFinal);
+            const ipfsHashesArray = Object.values(ipfsHashes);
             // Proceed to create the asset with the returned IPFS URIs
             await createAsset(assetName, totalShares, pricePerShare, ipfsHashesArray);
         } catch (error) {
             console.error('Failed to upload images to IPFS or create asset:', error);
         }
     };
+
 
 
     return (
