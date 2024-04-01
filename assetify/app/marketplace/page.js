@@ -53,30 +53,6 @@ export default function Marketplace() {
                         <h1>{JSON.stringify(asset.ipfsHashes)}</h1>
                     </CardHeader>
                     <CardBody className="overflow-visible py-2">
-                        {/* {asset.ipfsHashes && asset.ipfsHashes[0] && (
-                            // <Image
-                            //     alt="Asset image"
-                            //     className="object-cover rounded-xl"
-                            //     // src={`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0].split('ipfs://')[1].split('/')[0]}`}
-                            //     src={`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0].split('ipfs://')[1]}`}
-                            //     width={270}
-                            // />
-
-                            // <MediaRenderer
-                            //     // src="ipfs://Qmb9ZV5yznE4C4YvyJe8DVFv1LSVkebdekY6HjLVaKmHZi"
-                            //     src={asset.ipfsHashes[0]}
-                            //     // poster="ipfs://QmV4HC9fNrPJQeYpbW55NLLuSBMyzE11zS1L4HmL6Lbk7X"
-                            //     poster={asset.ipfsHashes[0]}
-                            // />
-
-                            // <Image
-                            //     alt="Asset image"
-                            //     className="object-cover rounded-xl"
-                            //     // src={`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0].split('ipfs://')[1].split('/')[0]}`}
-                            //     src='https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/QmR2Q7kvEsdDcYPzSpo2MrrvwGvs84aTYQhkwRFhdSQACC'
-                            //     // width={270}
-                            // />
-                        )} */}
                         <Image
                             alt="Asset image"
                             className="object-cover rounded-xl"
