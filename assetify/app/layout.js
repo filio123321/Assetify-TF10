@@ -2,11 +2,13 @@ import { Providers } from "@/providers";
 // import { AccountProvider } from "@/context/context";
 import AppProvider from "@/context/context";
 import { Inter } from "next/font/google";
+import { Zen_Dots } from "next/font/google";
 import "./globals.css";
 
 import NavigationBar from "@/components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
+const zendots = Zen_Dots({ subsets: ["latin"], weight: ['400'] });
 
 
 export const metadata = {
@@ -17,10 +19,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
-      <body className={inter.className}>
+      {/* <body className={inter.className}> */}
+      <body className={zendots.className}>
         <AppProvider>
           <Providers>
             <NavigationBar />
+
+            <div className='gradient' />
+
             {children}
           </Providers>
         </AppProvider>
