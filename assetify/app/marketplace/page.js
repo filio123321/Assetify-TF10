@@ -45,8 +45,6 @@ export default function Marketplace() {
                         <Image
                             alt="Card background"
                             className="object-cover rounded-xl"
-                            // src='https://ipfs.io/ipfs/QmWbYTUVV8GmB2EW8qn5CF3eF9aLW3msjr2cS2izckKadu/406679791_122102880962132522_5789972342587448293_n.jpg'
-                            // src={`https://ipfs.io/ipfs/QmQRi9Agea6V1xXxCVxuhQtQ1L1RR3orS6tANPbejtbiGc/0x0.png`}
                             src={`https://ipfs.io/ipfs/${asset.ipfsHashes[0] && asset.ipfsHashes[0].split('ipfs://')[1]}`}
                             width={270}
                         />
