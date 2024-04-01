@@ -50,7 +50,7 @@ export default function Marketplace() {
                         <p className="text-tiny uppercase font-bold">{asset.pricePerShare} ETH</p>
                         <small className="text-default-500">{asset.owner}</small>
                         <h4 className="font-bold text-large">{asset.name}</h4>
-                        {/* <h1>{asset.ipfsHashes[0].split('ipfs://')[1].split('/')[0]}</h1> */}
+                        <h1>{JSON.stringify(asset.ipfsHashes)}</h1>
                     </CardHeader>
                     <CardBody className="overflow-visible py-2">
                         {/* {asset.ipfsHashes && asset.ipfsHashes[0] && (
@@ -69,22 +69,19 @@ export default function Marketplace() {
                             //     poster={asset.ipfsHashes[0]}
                             // />
 
-                            <Image
-                                alt="Asset image"
-                                className="object-cover rounded-xl"
-                                // src={`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0].split('ipfs://')[1].split('/')[0]}`}
-                                src='https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/QmR2Q7kvEsdDcYPzSpo2MrrvwGvs84aTYQhkwRFhdSQACC'
-                                // width={270}
-                                
-                            />
+                            // <Image
+                            //     alt="Asset image"
+                            //     className="object-cover rounded-xl"
+                            //     // src={`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0].split('ipfs://')[1].split('/')[0]}`}
+                            //     src='https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/QmR2Q7kvEsdDcYPzSpo2MrrvwGvs84aTYQhkwRFhdSQACC'
+                            //     // width={270}
+                            // />
                         )} */}
                         <Image
                             alt="Asset image"
                             className="object-cover rounded-xl"
                             // src={`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0].split('ipfs://')[1].split('/')[0]}`}
                             src='https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/QmR2Q7kvEsdDcYPzSpo2MrrvwGvs84aTYQhkwRFhdSQACC.jpg'
-                        // width={270}
-
                         />
                     </CardBody>
                 </Card>

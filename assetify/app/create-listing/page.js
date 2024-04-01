@@ -55,24 +55,45 @@ export default function CreateListing() {
 
             // Asynchronously prepare data for IPFS upload
             const dataToUpload = await Promise.all(Array.from(images).map(async (file) => {
+                const fileExtension = file.name.split('.').pop();
                 return {
-                    name: file.name,
+                    name: `image.${fileExtension}`,
                     type: file.type,
-                    buffer: await file.arrayBuffer() // Correctly await the arrayBuffer call
+                    buffer: await file.arrayBuffer(), // Correctly await the arrayBuffer call
+                    image: file
                 };
             }));
 
+
+
+            // BI TRQBVALO NA BACHKA?
+            // PROBLEMUT E CHE CHE NE SE KACVHA FILE-A (OTGORE E PROBLEMA NAI VEROQTNO), AKO NE STANE NISHTO
+            // NAI-DOBRE DA NAPRAVQ EDIN API ROUTE NA SAMIQ MI PROEKT
+
+            // TRQBVA DA TESTVAM
+
+
+
+            // Example: Upload an array of JSON objects
+            // const objects = [
+            //     { name: "JSON 1", image: files[0] },
+            //     { name: "JSON 2", image: files[1] },
+            // ];
+
+            // Upload to IPFS, like the example above
+            
+
             // Upload the data to IPFS
             const ipfsHashes = await upload({ data: dataToUpload });
-            // let ipfsHashes = [];
-            // for (let i = 0; i < dataToUpload.length; i++) {
-            //     const uploadUrl = await uploadToIPFS(dataToUpload[i]);
-            //     ipfsHashes.push(uploadUrl);
-            // }
-            console.log('Successfully uploaded images. IPFS hashes: ', ipfsHashes);
+
+            let ipfsHashesFinal = [];
+            for (let i = 0; i < ipfsHashes.length; i++) {
+                ipfsHashesFinal.push(ipfsHashes[i].image);
+            }
+            console.log('Successfully uploaded images. IPFS hashes: ', ipfsHashesFinal);
 
             // create an arry of IPFS URIs
-            const ipfsHashesArray = Object.values(ipfsHashes);
+            const ipfsHashesArray = Object.values(ipfsHashesFinal);
             // Proceed to create the asset with the returned IPFS URIs
             await createAsset(assetName, totalShares, pricePerShare, ipfsHashesArray);
         } catch (error) {
