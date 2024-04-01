@@ -25,7 +25,6 @@ export default function RootLayout({ children }) {
           <Providers>
             <NavigationBar />
 
-            <div className='gradient z-0' />
 
             {children}
           </Providers>

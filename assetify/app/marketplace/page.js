@@ -1,33 +1,19 @@
 'use client'
 import { useContext, useState, useEffect, useTransition } from "react";
-
 import { AppContext } from "@/context/context";
-
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Textarea } from "@/components/ui/textarea"
-
-import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
+import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
-
-import { MediaRenderer } from "@thirdweb-dev/react";
-
 
 export default function Marketplace() {
     const {
-        account, connectWallet, error, balance, createAsset, fetchAllAssets, buyShares, sellShares
+        account, fetchAllAssets
     } = useContext(AppContext);
-
-    // For Assetify
 
     const [assets, setAssets] = useState([]);
     const [isPending, startTransition] = useTransition();
-    // const [_buyShares, _setBuyShares] = useState({}); // Object to store buy shares for each asset
-    // const [_sellShares, _setSellShares] = useState({});
-
 
     useEffect(() => {
-        if (account) { // Ensure assets are fetched only if an account is connected
+        if (account) {
             startTransition(() => {
                 const loadAssets = async () => {
                     const fetchedAssets = await fetchAllAssets();
@@ -38,32 +24,45 @@ export default function Marketplace() {
         }
     }, [account, startTransition]);
 
-
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <main className="flex min-h-screen w-full flex-wrap justify-center p-4 gap-4"> {/* Grid layout */}
             {isPending && <div>Loading assets...</div>}
-
-            {/* Display assets */}
             {assets.map((asset, index) => (
-                <Card key={index} className="py-4"> {/* Ensure each Card has a unique key */}
+                // <Card key={index} className="w-56 flex flex-col items-stretch shadow-lg rounded-lg overflow-hidden"> {/* Adjusted for consistent width */}
+                //     <CardHeader className=" pt-2 px-4 flex-col items-start">
+
+                //         <h4 className="font-bold text-lg">{asset.name}</h4>
+                //         <p className="text-sm uppercase font-bold">{asset.pricePerShare} ETH</p>
+                //         {/* <small className="">{asset.owner}</small>
+                //         <h1 className="text-sm">{JSON.stringify(asset.ipfsHashes)}</h1> */}
+                //     </CardHeader>
+                //     <CardBody className="overflow-visible py-2">
+                //             <div className="w-full h-auto">
+                //                 <Image
+                //                     alt="Asset image"
+                //                     className="w-full h-auto object-cover rounded-xl" // Adjusted for responsive images
+                //                     src='https://ipfs.io/ipfs/QmWbYTUVV8GmB2EW8qn5CF3eF9aLW3msjr2cS2izckKadu/406679791_122102880962132522_5789972342587448293_n.jpg'
+                //                 />
+                //             </div>
+                //         </CardBody>
+                // </Card>
+                <Card key={index} className="py-4">
                     <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                        <p className="text-tiny uppercase font-bold">{asset.pricePerShare} ETH</p>
-                        <small className="text-default-500">{asset.owner}</small>
+                        <p className="text-tiny uppercase font-bold">Available {asset.sharesAvailable}/{asset.totalShares}</p>
+                        <small className="text-default-500">{asset.pricePerShare} ETH</small>
                         <h4 className="font-bold text-large">{asset.name}</h4>
-                        <h1>{JSON.stringify(asset.ipfsHashes)}</h1>
                     </CardHeader>
                     <CardBody className="overflow-visible py-2">
                         <Image
-                            alt="Asset image"
+                            alt="Card background"
                             className="object-cover rounded-xl"
-                            // src={`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0].split('ipfs://')[1].split('/')[0]}`}
-                            src='https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/QmR2Q7kvEsdDcYPzSpo2MrrvwGvs84aTYQhkwRFhdSQACC.jpg'
+                            // src='https://ipfs.io/ipfs/QmWbYTUVV8GmB2EW8qn5CF3eF9aLW3msjr2cS2izckKadu/406679791_122102880962132522_5789972342587448293_n.jpg'
+                            src='https://ipfs.io/ipfs/QmQRi9Agea6V1xXxCVxuhQtQ1L1RR3orS6tANPbejtbiGc/0x0.png'
+                            width={270}
                         />
                     </CardBody>
                 </Card>
-                // <h1>{JSON.stringify(asset.ipfsHashes)}</h1>
             ))}
-
-        </main >
+        </main>
     );
 }
