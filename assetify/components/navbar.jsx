@@ -40,7 +40,10 @@ export default function NavigationBar() {
                     className="sm:hidden"
                 />
                 <NavbarBrand>
-                    <p className="font-bold text-inherit">Assetify</p>
+                    {/* <p className="font-bold text-inherit">Assetify</p> */}
+                    <Link href="/" color="foreground" size="lg">
+                        Assetify
+                    </Link>
                 </NavbarBrand>
             </NavbarContent>
 
@@ -53,35 +56,27 @@ export default function NavigationBar() {
                 </NavbarItem> */}
                 <NavbarItem {...(pathname === "/marketplace" ? { isActive: true } : {})}>
                     {/* <Link href="#" aria-current="page"> */}
-                    <Link href="#" aria-current="page" {...(pathname === "/marketplace" ? {} : { color: "foreground" })}>
+                    <Link href="/marketplace" aria-current="page" {...(pathname === "/marketplace" ? {} : { color: "foreground" })}>
                         Marketplace
                     </Link>
                 </NavbarItem>
                 <NavbarItem {...(pathname === "/portfolio" ? { isActive: true } : {})}>
-                    <Link href="#" aria-current="page" {...(pathname === "/portfolio" ? {} : { color: "foreground" })}>
+                    <Link href="/portfolio" aria-current="page" {...(pathname === "/portfolio" ? {} : { color: "foreground" })}>
                         Portfolio
                     </Link>
                 </NavbarItem>
                 <NavbarItem {...(pathname === "/cryptix" ? { isActive: true } : {})}>
-                    <Link href="#" aria-current="page" {...(pathname === "/cryptix" ? {} : { color: "foreground" })}>
+                    <Link href="/cryptix" aria-current="page" {...(pathname === "/cryptix" ? {} : { color: "foreground" })}>
                         CryptiX
                     </Link>
                 </NavbarItem>
                 <NavbarItem {...(pathname === "/aboutus" ? { isActive: true } : {})}>
-                    <Link href="#" aria-current="page" {...(pathname === "/aboutus" ? {} : { color: "foreground" })}>
+                    <Link href="/aboutus" aria-current="page" {...(pathname === "/aboutus" ? {} : { color: "foreground" })}>
                         About us
                     </Link>
                 </NavbarItem>
             </NavbarContent>
             <NavbarContent justify="end">
-                {/* <NavbarItem className="hidden lg:flex">
-                    <Link href="#">Login</Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Button as={Link} color="primary" href="#" variant="flat">
-                        Sign Up
-                    </Button>
-                </NavbarItem> */}
                 {!account && (
                     <NavbarItem>
                         <Button onClick={connectWallet} color="primary">
