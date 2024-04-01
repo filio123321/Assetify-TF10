@@ -25,10 +25,10 @@ export default function NavigationBar() {
 
     const menuItems = [
         { label: "Home", href: "/", type: "link" },
-        { label: "Profile", href: "#", type: "link" },
-        { label: "Dashboard", href: "#", type: "link" },
-        // Kakvito drugi linkove imam
-        // { label: "Log Out", type: "action", action: logout },
+        { label: "Marketplace", href: "/marketplace", type: "link" },
+        { label: "Portfolio", href: "/portfolio", type: "link" },
+        { label: "CryptiX", href: "/cryptix", type: "link" },
+        { label: "About us", href: "/aboutus", type: "link" },
     ];
 
 
@@ -51,15 +51,25 @@ export default function NavigationBar() {
                         Home
                     </Link>
                 </NavbarItem>
-                <NavbarItem {...(pathname === "/customers" ? { isActive: true } : {})}>
+                <NavbarItem {...(pathname === "/marketplace" ? { isActive: true } : {})}>
                     {/* <Link href="#" aria-current="page"> */}
-                    <Link href="#" aria-current="page" {...(pathname === "/customers" ? {} : { color: "foreground" })}>
-                        Customers
+                    <Link href="#" aria-current="page" {...(pathname === "/marketplace" ? {} : { color: "foreground" })}>
+                        Marketplace
                     </Link>
                 </NavbarItem>
-                <NavbarItem {...(pathname === "/integrations" ? { isActive: true } : {})}>
-                    <Link href="#" aria-current="page" {...(pathname === "/integrations" ? {} : { color: "foreground" })}>
-                        Integrations
+                <NavbarItem {...(pathname === "/portfolio" ? { isActive: true } : {})}>
+                    <Link href="#" aria-current="page" {...(pathname === "/portfolio" ? {} : { color: "foreground" })}>
+                        Portfolio
+                    </Link>
+                </NavbarItem>
+                <NavbarItem {...(pathname === "/cryptix" ? { isActive: true } : {})}>
+                    <Link href="#" aria-current="page" {...(pathname === "/cryptix" ? {} : { color: "foreground" })}>
+                        CryptiX
+                    </Link>
+                </NavbarItem>
+                <NavbarItem {...(pathname === "/aboutus" ? { isActive: true } : {})}>
+                    <Link href="#" aria-current="page" {...(pathname === "/aboutus" ? {} : { color: "foreground" })}>
+                        About us
                     </Link>
                 </NavbarItem>
             </NavbarContent>
@@ -89,7 +99,7 @@ export default function NavigationBar() {
                     </>
                 )}
             </NavbarContent>
-            {/* <NavbarMenu>
+            <NavbarMenu>
                 {menuItems.map((item, index) => {
                     if (item.type === "link") {
                         return (
@@ -121,7 +131,7 @@ export default function NavigationBar() {
                     }
                     return null; // For items that don't match the expected types
                 })}
-            </NavbarMenu> */}
+            </NavbarMenu>
 
         </Navbar >
     );
