@@ -46,11 +46,11 @@ export default function NavigationBar() {
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 {/* <NavbarItem isActive={pathname === "/"}> */}
-                <NavbarItem {...(pathname === "/" ? { isActive: true } : {})}>
+                {/* <NavbarItem {...(pathname === "/" ? { isActive: true } : {})}>
                     <Link href="/" aria-current="page" {...(pathname === "/" ? {} : { color: "foreground" })}>
                         Home
                     </Link>
-                </NavbarItem>
+                </NavbarItem> */}
                 <NavbarItem {...(pathname === "/marketplace" ? { isActive: true } : {})}>
                     {/* <Link href="#" aria-current="page"> */}
                     <Link href="#" aria-current="page" {...(pathname === "/marketplace" ? {} : { color: "foreground" })}>
