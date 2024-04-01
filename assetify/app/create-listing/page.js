@@ -77,8 +77,8 @@ export default function CreateListing() {
 
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <div className="box">
+        <main className="flex min-h-screen flex-col items-center justify-between p-12">
+            {/* <div className="box">
                 {
                     account ? (
                         <>
@@ -89,31 +89,31 @@ export default function CreateListing() {
                         <Button onClick={connectWallet}>Connect Wallet</Button>
                     )
                 }
-            </div>
+            </div> */}
 
             {/* Error */}
             {error && <div>{error}</div>}
 
             <div>
                 {/* Asset Creation Form */}
-                <div>
+                <div className="py-4">
                     <Label htmlFor="assetName" value="Asset Name" />
                     <Textarea id="assetName" placeholder="Enter asset name" value={assetName} onChange={(e) => setAssetName(e.target.value)} />
                 </div>
-                <div>
+                <div className="py-4">
                     <Label htmlFor="totalShares" value="Total Shares" />
                     <Textarea id="totalShares" placeholder="Enter total shares" type="number" value={totalShares} onChange={(e) => setTotalShares(parseInt(e.target.value))} />
                 </div>
-                <div>
+                <div className="py-4">
                     <Label htmlFor="pricePerShare" value="Price Per Share (ETH)" />
                     <Textarea id="pricePerShare" placeholder="Enter price per share" value={pricePerShare} onChange={(e) => setPricePerShare(e.target.value)} />
                 </div>
-                <div>
+                <div className="py-4">
                     <Label htmlFor="images" value="Images" />
                     {/* <input type="file" id="images" multiple /> */}
                     <Input type="file" id="images" multiple />
                 </div>
-                <Button onClick={handleSubmit}>Create Asset</Button>
+                <Button className="py-4" onClick={handleSubmit}>Create Asset</Button>
             </div>
         </main>
     );

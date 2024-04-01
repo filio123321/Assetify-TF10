@@ -33,10 +33,10 @@ export default function Marketplace() {
                 </div>
             </div>
 
-            {/* Grid container */}
-            <div className="columns-3 md:columns-4 lg:columns-5 gap-x-4 gap-y-10"> {/* Apply column layout here */}
+            {/* Grid container with responsive adjustments */}
+            <div className=" columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-x-4 gap-y-8 text-center items-center justify-center"> {/* Adjusted for responsiveness */}
                 {assets.map((asset, index) => (
-                    <Card key={index} className="py-4 h-full break-inside-avoid mb-4" isPressable> {/* Added margin-bottom to each card */}
+                    <Card key={index} className="py-4 h-full break-inside-avoid mb-4 justify-center" isPressable>
                         <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                             <p className="text-tiny uppercase font-bold">Available {asset.sharesAvailable}/{asset.totalShares}</p>
                             <small className="text-default-500">{asset.pricePerShare} ETH</small>
