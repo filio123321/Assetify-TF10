@@ -97,11 +97,11 @@ export default function NavigationBar() {
                                     </Button>
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Profile Actions" variant="flat">
-                                    {/* <DropdownItem key="marketplace">
-                                        <Link href="/marketplace" aria-current="page">
-                                            Marketplace
-                                        </Link>
-                                    </DropdownItem> */}
+                                    <DropdownItem key="balance" className="h-14 gap-2">
+                                        {/* Balance: {parseFloat(balance).toFixed(2)} ETH */}
+                                        <p className="font-semibold">Balance:</p>
+                                        <p className="font-semibold">{parseFloat(balance).toFixed(5)} ETH</p>
+                                    </DropdownItem>
                                     <DropdownItem key="create-listing">
                                         <Link href="/create-listing" aria-current="page">
                                             Create a Listing
