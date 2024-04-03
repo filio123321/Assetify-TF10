@@ -14,6 +14,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@thirdweb-dev/react": "^4.4.28",
     "@thirdweb-dev/sdk": "^4.0.54",
+    "@vercel/analytics": "^1.2.2",
     "@walletconnect/web3-provider": "^1.8.0",
     "@web3modal/wagmi": "^4.1.1",
     "axios": "^1.6.8",

@@ -4,6 +4,7 @@ import AppProvider from "@/context/context";
 import { Inter } from "next/font/google";
 import { Zen_Dots } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/react"
 
 import NavigationBar from "@/components/navbar";
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
 
 
             {children}
+            <Analytics />
           </Providers>
         </AppProvider>
       </body>
