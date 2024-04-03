@@ -41,6 +41,31 @@ export default function CreateListing() {
         }
     }, [account]);
 
+    useEffect(() => {
+        if (error) {
+            console.log('Error:', error.code);
+            setLocalError(handleError(error));
+        }
+    }, [error]);
+
+    const handleError = (err) => {
+        if (err.code === 'ACTION_REJECTED') {
+            // User rejected the transaction
+            return "Transaction was rejected by the user.";
+        } else if (err.code === 'WALLET_NOT_CONNECTED') {
+            // Insufficient funds for gas * price + value
+            return "Insufficient funds in the wallet.";
+        } else if (err.code === 'MISSING_PROVIDER') {
+            // Handle smart contract reverts specifically
+            return `Smart contract error: ${err.message}`;
+        } else {
+            // General error handler
+            // return err.message || "An unexpected error occurred.";
+            return err.message || "An unexpected error occurred.";
+        }
+    };
+    
+
     const handleSubmit = async () => {
         setLocalError(''); // Reset local error state
         // check if all fields are filled
@@ -103,7 +128,7 @@ export default function CreateListing() {
                     </CardHeader>
                     <CardBody>
                         {localError && <div className="text-red-500">{localError}</div>}
-                        {error && <div className="text-red-500">{error}</div>}
+                        {/* {error.message && <div className="text-red-500">{error.message}</div>} */}
 
                         <div className="py-4">
                             <Label htmlFor="assetName" value="Asset Name" />

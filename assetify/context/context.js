@@ -40,7 +40,7 @@ const AppProvider = ({ children }) => {
                 setBalance(ethers.utils.formatEther(await signer.getBalance()));
             }
         } catch (err) {
-            setError(err.message);
+            setError(err);
         }
     };
 
@@ -54,7 +54,7 @@ const AppProvider = ({ children }) => {
                 });
                 setAccount(accounts[0]);
             } catch (err) {
-                setError(err.message);
+                setError(err);
             }
         }
     };
@@ -72,7 +72,7 @@ const AppProvider = ({ children }) => {
             console.log("Asset created successfully");
         } catch (err) {
             console.error("Error creating asset:", err);
-            setError(err.message || "Failed to create asset");
+            setError(err || "Failed to create asset");
         }
     };
 
@@ -95,7 +95,7 @@ const AppProvider = ({ children }) => {
             return decodedAssets;
         } catch (err) {
             console.error("Error fetching assets:", err);
-            setError(err.message || "Failed to fetch assets");
+            setError(err || "Failed to fetch assets");
         }
     };
 
@@ -110,7 +110,7 @@ const AppProvider = ({ children }) => {
             console.log("Shares bought successfully");
         } catch (err) {
             console.error("Error buying shares:", err);
-            setError(err.message || "Failed to buy shares");
+            setError(err || "Failed to buy shares");
         }
     };
 
@@ -126,7 +126,7 @@ const AppProvider = ({ children }) => {
             console.log("Shares sold successfully");
         } catch (err) {
             console.error("Error selling shares:", err);
-            setError(err.message || "Failed to sell shares");
+            setError(err || "Failed to sell shares");
         }
     };
 
