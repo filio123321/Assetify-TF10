@@ -26,7 +26,7 @@ export default function NavigationBar() {
     const menuItems = [
         { label: "Home", href: "/", type: "link" },
         { label: "Marketplace", href: "/marketplace", type: "link" },
-        { label: "Create a Listing", href: "/create-listing", type: "link"},
+        { label: "Create a Listing", href: "/create-listing", type: "link" },
         { label: "Portfolio", href: "/portfolio", type: "link" },
         { label: "CryptiX", href: "/cryptix", type: "link" },
         { label: "About us", href: "/aboutus", type: "link" },
@@ -50,17 +50,17 @@ export default function NavigationBar() {
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 {/* <NavbarItem isActive={pathname === "/"}> */}
-                <NavbarItem {...(pathname === "/" ? { isActive: true } : {})}>
+                {/* <NavbarItem {...(pathname === "/" ? { isActive: true } : {})}>
                     <Link href="/" aria-current="page" {...(pathname === "/" ? {} : { color: "foreground" })}>
                         Home
                     </Link>
-                </NavbarItem>
-                {/* <NavbarItem {...(pathname === "/marketplace" ? { isActive: true } : {})}>
+                </NavbarItem> */}
+                <NavbarItem {...(pathname === "/marketplace" ? { isActive: true } : {})}>
                     <Link href="/marketplace" aria-current="page" {...(pathname === "/marketplace" ? {} : { color: "foreground" })}>
                         Marketplace
                     </Link>
                 </NavbarItem>
-                <NavbarItem {...(pathname === "/portfolio" ? { isActive: true } : {})}>
+                {/* <NavbarItem {...(pathname === "/portfolio" ? { isActive: true } : {})}>
                     <Link href="/portfolio" aria-current="page" {...(pathname === "/portfolio" ? {} : { color: "foreground" })}>
                         Portfolio
                     </Link>
@@ -97,11 +97,11 @@ export default function NavigationBar() {
                                     </Button>
                                 </DropdownTrigger>
                                 <DropdownMenu aria-label="Profile Actions" variant="flat">
-                                    <DropdownItem key="Marketplace">
+                                    {/* <DropdownItem key="marketplace">
                                         <Link href="/marketplace" aria-current="page">
                                             Marketplace
                                         </Link>
-                                    </DropdownItem>
+                                    </DropdownItem> */}
                                     <DropdownItem key="create-listing">
                                         <Link href="/create-listing" aria-current="page">
                                             Create a Listing
