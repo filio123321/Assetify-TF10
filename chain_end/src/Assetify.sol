@@ -118,4 +118,11 @@ contract Assetify {
         return assets[assetId].ipfsHashes;
     }
 
+    // function deleteAsset(uint256 assetId) public { // To Add!
+    //     require(assetId < assets.length, "Asset does not exist");
+    //     require(msg.sender == assets[assetId].owner, "Only asset owner can delete asset");
+
+    //     delete assets[assetId];
+    // }
+
 }

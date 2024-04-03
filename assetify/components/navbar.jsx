@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect } from "react";
 import { useRouter, usePathname } from 'next/navigation'
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@nextui-org/react";
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
 
 import { AppContext } from "@/context/context";
 import ShortenText from "@/components/ShortenText";
@@ -26,6 +26,7 @@ export default function NavigationBar() {
     const menuItems = [
         { label: "Home", href: "/", type: "link" },
         { label: "Marketplace", href: "/marketplace", type: "link" },
+        { label: "Create a Listing", href: "/create-listing", type: "link"},
         { label: "Portfolio", href: "/portfolio", type: "link" },
         { label: "CryptiX", href: "/cryptix", type: "link" },
         { label: "About us", href: "/aboutus", type: "link" },
@@ -49,13 +50,12 @@ export default function NavigationBar() {
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 {/* <NavbarItem isActive={pathname === "/"}> */}
-                {/* <NavbarItem {...(pathname === "/" ? { isActive: true } : {})}>
+                <NavbarItem {...(pathname === "/" ? { isActive: true } : {})}>
                     <Link href="/" aria-current="page" {...(pathname === "/" ? {} : { color: "foreground" })}>
                         Home
                     </Link>
-                </NavbarItem> */}
-                <NavbarItem {...(pathname === "/marketplace" ? { isActive: true } : {})}>
-                    {/* <Link href="#" aria-current="page"> */}
+                </NavbarItem>
+                {/* <NavbarItem {...(pathname === "/marketplace" ? { isActive: true } : {})}>
                     <Link href="/marketplace" aria-current="page" {...(pathname === "/marketplace" ? {} : { color: "foreground" })}>
                         Marketplace
                     </Link>
@@ -64,7 +64,7 @@ export default function NavigationBar() {
                     <Link href="/portfolio" aria-current="page" {...(pathname === "/portfolio" ? {} : { color: "foreground" })}>
                         Portfolio
                     </Link>
-                </NavbarItem>
+                </NavbarItem> */}
                 <NavbarItem {...(pathname === "/cryptix" ? { isActive: true } : {})}>
                     <Link href="/cryptix" aria-current="page" {...(pathname === "/cryptix" ? {} : { color: "foreground" })}>
                         CryptiX
@@ -87,9 +87,33 @@ export default function NavigationBar() {
                 {account && (
                     <>
                         <NavbarItem>
-                            <Button as={Link} color="primary" href="#" variant="flat">
+                            {/* <Button as={Link} color="primary" href="#" variant="flat">
                                 <ShortenText text={account} />
-                            </Button>
+                            </Button> */}
+                            <Dropdown placement="bottom-end">
+                                <DropdownTrigger>
+                                    <Button as={Link} color="primary" href="#" variant="flat">
+                                        <ShortenText text={account} />
+                                    </Button>
+                                </DropdownTrigger>
+                                <DropdownMenu aria-label="Profile Actions" variant="flat">
+                                    <DropdownItem key="Marketplace">
+                                        <Link href="/marketplace" aria-current="page">
+                                            Marketplace
+                                        </Link>
+                                    </DropdownItem>
+                                    <DropdownItem key="create-listing">
+                                        <Link href="/create-listing" aria-current="page">
+                                            Create a Listing
+                                        </Link>
+                                    </DropdownItem>
+                                    <DropdownItem key="portfolio">
+                                        <Link href="/portfolio" aria-current="page">
+                                            Portfolio
+                                        </Link>
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
                         </NavbarItem>
                     </>
                 )}
