@@ -2,6 +2,8 @@
 
 import { useContext, useState, useEffect } from "react";
 import { useStorageUpload } from "@thirdweb-dev/react"; // Import useStorageUpload hook
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
 
 import { AppContext } from "@/context/context";
 
@@ -14,19 +16,26 @@ import { Input as SInput } from "@/components/ui/input"
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
 import { Input } from "@nextui-org/react";
 
+import { Loader2 } from "lucide-react"
+
+
 
 export default function CreateListing() {
     const {
         account, connectWallet, error, balance, createAsset, fetchAllAssets, buyShares, sellShares
     } = useContext(AppContext);
 
+    const { width, height } = useWindowSize()
+
+
     // For Assetify
     const [assetName, setAssetName] = useState('');
     const [totalShares, setTotalShares] = useState(1);
     const [pricePerShare, setPricePerShare] = useState('');
     const [assets, setAssets] = useState([]);
-
-    const [localError, setLocalError] = useState(''); // Local error state to handle form validation errors
+    const [successMessage, setSuccessMessage] = useState('');
+    const [localError, setLocalError] = useState(''); // Local error state to handle form validation errors // razl ot error
+    const [submitButtonLoading, setSubmitButtonLoading] = useState(false);
 
     const { mutateAsync: upload } = useStorageUpload();
 
@@ -64,10 +73,12 @@ export default function CreateListing() {
             return err.message || "An unexpected error occurred.";
         }
     };
-    
+
 
     const handleSubmit = async () => {
         setLocalError(''); // Reset local error state
+        setSuccessMessage(''); // Reset success message
+        setSubmitButtonLoading(true); // Set submit button loading state
         // check if all fields are filled
         if (!assetName || !totalShares || !pricePerShare) {
             console.error('All fields are required');
@@ -111,16 +122,50 @@ export default function CreateListing() {
             // create an arry of IPFS URIs
             const ipfsHashesArray = Object.values(ipfsHashes);
             // Proceed to create the asset with the returned IPFS URIs
-            await createAsset(assetName, totalShares, pricePerShare, ipfsHashesArray);
+            try {
+                await createAsset(assetName, totalShares, pricePerShare, ipfsHashesArray);
+                setSuccessMessage('Asset created successfully!'); // Add this line
+            } catch (error) {
+                console.error('Failed to create asset:', error);
+                setLocalError('Failed to create asset');
+            }
         } catch (error) {
             console.error('Failed to upload images to IPFS or create asset:', error);
+            setLocalError('Failed to upload images to IPFS or create asset');
         }
+
+        setSubmitButtonLoading(false); // Reset submit button loading state
     };
 
+    const SubmitButton = () => {
+        if (submitButtonLoading) {
+            return (
+                <Button disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                </Button>
+            );
+        } else {
+            return (
+                <Button onClick={handleSubmit}>Create Asset</Button>
+            );
+        }
+    }
+
+    const ShowConfetti = () => {
+        if (successMessage) {
+            return (
+                <Confetti width={width} height={height} />
+            );
+        } else {
+            return null;
+        }
+    }
 
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-12">
+            <ShowConfetti />
             <div className="flex flex-col items-center justify-center space-y-4">
                 <Card>
                     <CardHeader>
@@ -128,6 +173,7 @@ export default function CreateListing() {
                     </CardHeader>
                     <CardBody>
                         {localError && <div className="text-red-500">{localError}</div>}
+                        {successMessage && <div className="text-green-500">{successMessage}</div>}
                         {/* {error.message && <div className="text-red-500">{error.message}</div>} */}
 
                         <div className="py-4">
@@ -148,7 +194,12 @@ export default function CreateListing() {
                         </div>
                     </CardBody>
                     <CardFooter>
-                        <Button onClick={handleSubmit}>Create Asset</Button>
+                        {/* <Button onClick={handleSubmit}>Create Asset</Button> */}
+                        {/* <Button disabled>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Please wait
+                        </Button> */}
+                        <SubmitButton />
                     </CardFooter>
                 </Card>
             </div>
