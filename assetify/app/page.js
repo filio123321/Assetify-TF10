@@ -25,7 +25,7 @@ export default function Home() {
       <main className="flex min-h-screen flex-col items-center justify-between p-16">
         {/* TItle */}
         <div className="w-full flex items-center justify-center">
-          <div className='font-bold lg:text-5xl text-4xl text-center max-w-screen-auto drop-shadow-lg pt-8 max-w-[60%]'>
+          <div className='font-bold lg:text-5xl text-4xl text-center max-w-screen-auto drop-shadow-lg pt-8 lg:max-w-[60%] max-w-[90%]'>
             <p className="bg-gradient-to-r from-pink-500 to-indigo-500 inline-block text-transparent bg-clip-text">Blockchain</p> real world asset marketplace
           </div>
         </div>
@@ -38,7 +38,7 @@ export default function Home() {
 
           <div className="lg:w-1/2 flex justify-center relative w-1/2 h-auto lg:h-auto">
             <Image
-              src="/crypto-web-trader.png"
+              src="/assetify_hero.webp"
               layout="responsive"
               width={500}
               height={300}
