@@ -1,8 +1,8 @@
 'use client'
 import { useContext, useState, useEffect, useTransition } from "react";
 import { AppContext } from "@/context/context";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
-import { Image } from "@nextui-org/react";
+
+import MarketListing from "@/components/marketListing";
 
 export default function Marketplace() {
     const {
@@ -11,13 +11,16 @@ export default function Marketplace() {
 
     const [assets, setAssets] = useState([]);
     const [isPending, startTransition] = useTransition();
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (account) {
             startTransition(() => {
                 const loadAssets = async () => {
+                    setIsLoading(true);
                     const fetchedAssets = await fetchAllAssets();
                     setAssets(fetchedAssets || []);
+                    setIsLoading(false); // Set loading to false here
                 };
                 loadAssets();
             });
@@ -35,23 +38,17 @@ export default function Marketplace() {
 
             {/* Grid container with responsive adjustments */}
             <div className=" columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-x-4 gap-y-8 text-center items-center justify-center"> {/* Adjusted for responsiveness */}
-                {assets.map((asset, index) => (
-                    <Card key={index} className="py-4 h-full break-inside-avoid mb-4 justify-center" isPressable>
-                        <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                            <p className="text-tiny uppercase font-bold">Available {asset.sharesAvailable}/{asset.totalShares}</p>
-                            <small className="text-default-500">{asset.pricePerShare} ETH</small>
-                            <h4 className="font-bold text-large">{asset.name}</h4>
-                        </CardHeader>
-                        <CardBody className="overflow-visible py-2">
-                            <Image
-                                alt="Card background"
-                                className="object-cover rounded-xl"
-                                src={`https://ipfs.io/ipfs/${asset.ipfsHashes[0] && asset.ipfsHashes[0].split('ipfs://')[1]}`}
-                                width={270}
-                            />
-                        </CardBody>
-                    </Card>
-                ))}
+                {isLoading ? (
+                    <p>Loading assets...</p>
+                ) : (
+                    assets.length === 0 ? (
+                        <p>No assets available</p>
+                    ) : (
+                        assets.map((asset, index) => (
+                            <MarketListing key={index} asset={asset} />
+                        ))
+                    )
+                )}
             </div>
         </main>
     );
