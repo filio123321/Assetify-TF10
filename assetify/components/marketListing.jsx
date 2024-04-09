@@ -1,6 +1,6 @@
 // 'use client'
 import React, { useState } from 'react';
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 import { Skeleton } from "@nextui-org/react";
 import {
@@ -10,6 +10,8 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/carousel";
+
+import { Button } from "@nextui-org/react";
 
 function MarketListing(props) {
     const { asset } = props;
@@ -48,6 +50,10 @@ function MarketListing(props) {
                     <CarouselNext />
                 </Carousel>
             </CardBody>
+            <CardFooter>
+                <Button className="w-full mx-1" color="danger">Sell</Button>
+                <Button className="w-full mx-1" color="success">Buy</Button>
+            </CardFooter>
         </Card>
     );
 }
