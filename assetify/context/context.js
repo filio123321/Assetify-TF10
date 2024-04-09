@@ -6,7 +6,7 @@ import { Assetify__factory } from '@/generated/contract-types';
 export const AppContext = createContext();
 
 const { ethereum } = typeof window !== "undefined" ? window : {};
-const ASSETIFY_ADDRESS = '0x746b2ac6a3E33B0CC31E5540F17c1C2d30bC8D27';
+const ASSETIFY_ADDRESS = '0x566738A90b395eB3d33752f2C52E5b8b1f72AC90';
 
 const AppProvider = ({ children }) => {
     const [account, setAccount] = useState("");
@@ -85,7 +85,9 @@ const AppProvider = ({ children }) => {
             const assets = await assetify.getAllAssets();
             console.log("Fetched assets:", assets);
             // Convert BigNumber and address values to strings for easy display
-            const decodedAssets = assets.map(asset => ({
+            // And include the assetId by using the index in the map function
+            const decodedAssets = assets.map((asset, index) => ({
+                assetId: index, // Assigning the index as the assetId
                 name: asset.name,
                 totalShares: asset.totalShares.toString(),
                 sharesAvailable: asset.sharesAvailable.toString(),
@@ -131,7 +133,21 @@ const AppProvider = ({ children }) => {
         }
     };
 
-
+    const checkUserShareOwnership = async (assetId) => {
+        console.log("Checking share ownership")
+        if (!account) return; // Ensure user is connected
+        try {
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, provider);
+            const sharesOwned = await assetify.getUserShares(assetId, account);
+            console.log("Shares owned by the current account in asset", assetId, ":", sharesOwned.toString());
+            console.log(`Shares owned by the current account in asset ${assetId}:`, sharesOwned.toString());
+            return sharesOwned;
+        } catch (err) {
+            console.error("Error checking share ownership:", err);
+            setError(err || "Failed to check share ownership");
+        }
+    };
 
 
     // Initial setup
@@ -151,7 +167,7 @@ const AppProvider = ({ children }) => {
     return (
         <AppContext.Provider value={{
             // account, connectWallet, error, balance, count, refreshCounter, incrementCounter, setNumber
-            account, connectWallet, error, balance, createAsset, fetchAllAssets, buyShares, sellShares
+            account, connectWallet, error, balance, createAsset, fetchAllAssets, buyShares, sellShares, checkUserShareOwnership
         }}>
             {children}
         </AppContext.Provider>

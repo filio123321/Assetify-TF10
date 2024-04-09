@@ -1,5 +1,6 @@
 // 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AppContext } from "@/context/context";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 import { Skeleton } from "@nextui-org/react";
@@ -16,10 +17,29 @@ import { Button } from "@nextui-org/react";
 function MarketListing(props) {
     const { asset } = props;
     const [imageLoaded, setImageLoaded] = useState(false);
+    const { account, checkUserShareOwnership } = useContext(AppContext);
+    const [ownsShares, setOwnsShares] = useState(false);
 
     const handleImageLoad = () => {
         setImageLoaded(true);
     };
+
+    useEffect(() => {
+        const checkOwnership = async () => {
+            console.log("trying..", asset.assetId);
+            const sharesOwned = await checkUserShareOwnership(asset.assetId);
+            console.log("sharesOwned", sharesOwned);
+            if (sharesOwned && sharesOwned.toNumber() > 0) {
+                setOwnsShares(true);
+            } else {
+                setOwnsShares(false);
+            }
+        };
+
+        if (asset.assetId !== undefined) {
+            checkOwnership();
+        }
+    }, [account, asset, checkUserShareOwnership]);
 
     return (
         <Card className="py-4 h-full break-inside-avoid mb-4 justify-center">
@@ -51,7 +71,10 @@ function MarketListing(props) {
                 </Carousel>
             </CardBody>
             <CardFooter>
-                <Button className="w-full mx-1" color="danger">Sell</Button>
+                {/* <Button className="w-full mx-1" color="danger">Sell</Button>
+                <Button className="w-full mx-1" color="success">Buy</Button> */}
+                {/* <Button className="w-full mx-1" color="danger" disabled={!ownsShares}>Sell</Button> */}
+                {ownsShares && <Button className="w-full mx-1" color="danger">Sell</Button>}
                 <Button className="w-full mx-1" color="success">Buy</Button>
             </CardFooter>
         </Card>
