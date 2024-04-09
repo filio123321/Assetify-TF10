@@ -37,7 +37,7 @@ const ListingBuy = (props) => {
                     <DialogHeader>
                         <DialogTitle>Edit profile</DialogTitle>
                         <DialogDescription>
-                            Make changes to your profile here. Click save when you're done.
+                            Make changes to your profile here. Click save when youre done.
                         </DialogDescription>
                     </DialogHeader>
                     <ProfileForm />
@@ -52,7 +52,7 @@ const ListingBuy = (props) => {
                 <DrawerHeader className="text-left">
                     <DrawerTitle>Edit profile</DrawerTitle>
                     <DrawerDescription>
-                        Make changes to your profile here. Click save when you're done.
+                        Make changes to your profile here. Click save when youre done.
                     </DrawerDescription>
                 </DrawerHeader>
                 <ProfileForm className="px-4" />
