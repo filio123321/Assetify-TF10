@@ -83,6 +83,7 @@ const AppProvider = ({ children }) => {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, provider);
             const assets = await assetify.getAllAssets();
+            console.log("Fetched assets:", assets);
             // Convert BigNumber and address values to strings for easy display
             const decodedAssets = assets.map(asset => ({
                 name: asset.name,
