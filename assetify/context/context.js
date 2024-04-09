@@ -140,8 +140,7 @@ const AppProvider = ({ children }) => {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, provider);
             const sharesOwned = await assetify.getUserShares(assetId, account);
-            console.log("Shares owned by the current account in asset", assetId, ":", sharesOwned.toString());
-            console.log(`Shares owned by the current account in asset ${assetId}:`, sharesOwned.toString());
+            // console.log(`Shares owned by the current account in asset ${assetId}:`, sharesOwned.toString());
             return sharesOwned;
         } catch (err) {
             console.error("Error checking share ownership:", err);
