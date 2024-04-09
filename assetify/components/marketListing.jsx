@@ -82,7 +82,7 @@ function MarketListing(props) {
                 </CardFooter>
             </Card>
 
-            <ListingBuy open={openBuyMenu} setOpen={setOpenBuyMenu} />
+            <ListingBuy open={openBuyMenu} setOpen={setOpenBuyMenu} asset={asset} />
 
         </>
     );
