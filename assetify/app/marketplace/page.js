@@ -47,6 +47,7 @@ export default function Marketplace() {
                         assets.map((asset, index) => (
                             <MarketListing key={index} asset={asset} />
                         ))
+
                     )
                 )}
             </div>

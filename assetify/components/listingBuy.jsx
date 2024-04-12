@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Image } from "@nextui-org/react";
+import { AppContext } from "@/context/context";
 import {
     Dialog,
     DialogContent,
@@ -37,15 +39,26 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/carousel";
+
 
 const FormSchema = z.object({
     shares: z.number().int().positive(),
 })
 
-function SharesForm({ className }) {
+function SharesForm(props) {
+    const { className, asset } = props;
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(FormSchema)
     });
+
+    const { account, buyShares } = useContext(AppContext);
 
     const form = useForm({
         resolver: zodResolver(FormSchema),
@@ -62,6 +75,29 @@ function SharesForm({ className }) {
         <Form {...form}>
             <form className={cn("grid items-start gap-4", className)} onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid gap-2">
+                    {/* courasel */}
+                    <Carousel className="w-full mix-w-max">
+                        <CarouselContent className="flex align-center">
+                            {asset.ipfsHashes.map((ipfsImageHash, index) => (
+                                <CarouselItem key={index} className="flex">
+                                    <div className="p-1 flex  items-center" >
+                                        <Image
+                                            alt="Card background"
+                                            className={`object-cover rounded-xl w-full aspect-auto max-h-screen`}
+                                            src={`https://ipfs.io/ipfs/${ipfsImageHash && ipfsImageHash.split('ipfs://')[1]}`}
+                                            // width={200}
+                                            height={200}
+                                            draggable={false}
+                                        />
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious className="absolute top-1/2 left-0 transform -translate-y-1/2" />
+                        <CarouselNext className="absolute top-1/2 right-0 transform -translate-y-1/2" />
+                    </Carousel>
+
+
                     <Label htmlFor="shares">How many shares</Label>
                     <Input type="number" id="shares" {...register("shares")} />
                     {errors.shares && <FormMessage type="error">{errors.shares.message}</FormMessage>}
@@ -89,7 +125,7 @@ const ListingBuy = (props) => {
                             Purchase shares of this asset. Currently {asset.sharesAvailable} shares available. Price per share: {asset.pricePerShare} ETH.
                         </DialogDescription>
                     </DialogHeader>
-                    <SharesForm />
+                    <SharesForm asset={asset} />
                 </DialogContent>
             </Dialog>
         );
@@ -104,7 +140,7 @@ const ListingBuy = (props) => {
                         Purchase shares of this asset. Currently {asset.sharesAvailable} shares available. Price per share: {asset.pricePerShare} ETH.
                     </DrawerDescription>
                 </DrawerHeader>
-                <SharesForm className="px-4" />
+                <SharesForm className="px-4" asset={asset} />
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>
                         <Button variant="outline">Cancel</Button>
@@ -114,24 +150,6 @@ const ListingBuy = (props) => {
         </Drawer>
     );
 };
-
-// function SharesForm({ className }) {
-//     return (
-//         <form className={cn("grid items-start gap-4", className)}>
-//             <div className="grid gap-2">
-//                 <Label htmlFor="shares">How many shares</Label>
-//                 {/* <Input id="pricePerShare" label="Price per share in ETH" value={pricePerShare} onChange={(e) => setPricePerShare(e.target.value)} isRequired /> */}
-//                 {/* <Input type="number" id="shares" label="Shares" isRequired/> */}
-//                 <Input type="number" id="shares" defaultValue="shadcn@example.com" />
-//             </div>
-//             {/* <div className="grid gap-2">
-//                 <Label htmlFor="username">Username</Label>
-//                 <Input id="username" defaultValue="@shadcn" />
-//             </div> */}
-//             <Button type="submit">Buy</Button>
-//         </form>
-//     )
-// }
 
 
 export default ListingBuy;
