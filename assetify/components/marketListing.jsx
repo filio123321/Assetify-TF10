@@ -14,6 +14,7 @@ import {
 } from "@/components/carousel";
 
 import { Button } from "@nextui-org/react";
+import { Tooltip } from "@nextui-org/react";
 
 function MarketListing(props) {
     const { asset } = props;
@@ -83,11 +84,20 @@ function MarketListing(props) {
                     </Carousel> */}
                 </CardBody>
                 <CardFooter>
-                    {/* <Button className="w-full mx-1" color="danger">Sell</Button>
-                <Button className="w-full mx-1" color="success">Buy</Button> */}
-                    {/* <Button className="w-full mx-1" color="danger" disabled={!ownsShares}>Sell</Button> */}
                     {ownsShares && <Button className="w-full mx-1" color="danger">Sell</Button>}
-                    <Button className="w-full mx-1 text-white" color="success" onClick={() => setOpenBuyMenu(true)} isDisabled={parseInt(asset.sharesAvailable) === 0}>Buy</Button>
+                    {parseInt(asset.sharesAvailable) === 0 ? (
+                        <Tooltip content="There are no abvailable shares to purchase.">
+                            <span className='w-full mx-1'>
+                                <Button className="w-full mx-1 text-white" color="success" isDisabled>
+                                    Buy
+                                </Button>
+                            </span>
+                        </Tooltip>
+                    ) : (
+                        <Button className="w-full mx-1 text-white" color="success" onClick={() => setOpenBuyMenu(true)}>
+                            Buy
+                        </Button>
+                    )}
                 </CardFooter>
             </Card>
 
