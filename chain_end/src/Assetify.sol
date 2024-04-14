@@ -220,29 +220,32 @@ contract Assetify {
             }
         }
 
-        require(
-            balances[assetId] >= totalProceeds,
-            "Insufficient funds in contract to pay out"
-        );
+        // require(
+        //     balances[assetId] >= totalProceeds,
+        //     "Insufficient funds in contract to pay out"
+        // );
 
-        // totalProceeds = (totalProceeds * 99) / 100; // 1% fee
+        if (balances[assetId] >= totalProceeds) { ///////// THIS IS NEW
+            asset.sharesAvailable += sharesToSell;
+            assetShares[assetId][msg.sender] -= sharesToSell;
+            payable(msg.sender).transfer(totalProceeds);
+            balances[assetId] -= totalProceeds;
+        } else {
+            // send all funds
+            asset.sharesAvailable += sharesToSell;
+            assetShares[assetId][msg.sender] -= sharesToSell;
+            payable(msg.sender).transfer(balances[assetId]);
+            balances[assetId] = 0;
+        }
 
-        asset.sharesAvailable += sharesToSell;
-        assetShares[assetId][msg.sender] -= sharesToSell;
-        // send the proceeds to the seller
-        payable(msg.sender).transfer(totalProceeds);
-        // deduct the proceeds from the contract balance
-        balances[assetId] -= totalProceeds;
 
         emit SharesSold(assetId, msg.sender, sharesToSell, asset.pricePerShare);
     }
-
 
     function getCurrentPrice(uint256 assetId) public view returns (uint256) {
         require(assetId < assets.length, "Asset does not exist");
         return assets[assetId].pricePerShare;
     }
-
 
     function getAllAssets() public view returns (Asset[] memory) {
         return assets;
