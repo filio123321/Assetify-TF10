@@ -6,15 +6,12 @@ import { Assetify__factory } from '@/generated/contract-types';
 export const AppContext = createContext();
 
 const { ethereum } = typeof window !== "undefined" ? window : {};
-const ASSETIFY_ADDRESS = '0xaF3b5Ab864F41c6b5377Ac94A3086d653b1F2018';
+const ASSETIFY_ADDRESS = '0x436fFC644600a461B64e985c11834C17BEE0a359';
 
 const AppProvider = ({ children }) => {
     const [account, setAccount] = useState("");
     const [balance, setBalance] = useState("");
-    // const [count, setCount] = useState(0);   
     const [error, setError] = useState("");
-
-
 
 
     // Check for MetaMask
@@ -61,12 +58,11 @@ const AppProvider = ({ children }) => {
 
 
     const createAsset = async (name, totalShares, pricePerShare, ipfsHashes) => {
-        if (!account) return; // En§sure user is connected
+        if (!account) return; // Ensure user is connected
         try {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const signer = await provider.getSigner();
             const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
-            console.log("Type of ipfsHashes: ", typeof ipfsHashes);
             const tx = await assetify.createAsset(name, totalShares, ethers.utils.parseEther(pricePerShare.toString()), ipfsHashes);
             await tx.wait();
             console.log("Asset created successfully");
@@ -108,7 +104,7 @@ const AppProvider = ({ children }) => {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const signer = await provider.getSigner();
             const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
-            const tx = await assetify.buyShares(assetId, sharesToBuy, { value: ethers.utils.parseEther(value.toString()), gasLimit: 100000});
+            const tx = await assetify.buyShares(assetId, sharesToBuy, { value: ethers.utils.parseEther(value.toString()), gasLimit: 200000 });
             await tx.wait();
             console.log("Shares bought successfully");
         } catch (err) {
@@ -125,9 +121,7 @@ const AppProvider = ({ children }) => {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const signer = await provider.getSigner();
             const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
-            const tx = await assetify.sellShares(assetId, sharesToSell, {
-                gasLimit: 100000 // Example gas limit; adjust based on needs and tests
-            });
+            const tx = await assetify.sellShares(assetId, sharesToSell, { gasLimit: 300000 });
             await tx.wait();
             console.log("Shares sold successfully");
         } catch (err) {
@@ -137,13 +131,11 @@ const AppProvider = ({ children }) => {
     };
 
     const checkUserShareOwnership = async (assetId) => {
-        console.log("Checking share ownership")
         if (!account) return; // Ensure user is connected
         try {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, provider);
             const sharesOwned = await assetify.getUserShares(assetId, account);
-            // console.log(`Shares owned by the current account in asset ${assetId}:`, sharesOwned.toString());
             return sharesOwned;
         } catch (err) {
             console.error("Error checking share ownership:", err);
@@ -151,13 +143,22 @@ const AppProvider = ({ children }) => {
         }
     };
 
+    // Function to get contract balance
+    const getContractBalance = async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
+        const balance = await assetify.getContractBalance();
+        return ethers.utils.formatEther(balance);
+    };
+
+
 
     // Initial setup
     useEffect(() => {
         if (checkEthereumExists()) {
             ethereum.on("accountsChanged", getConnectedAccounts);
             getConnectedAccounts();
-            // refreshCounter(); // Initial counter state fetch
         }
         return () => {
             if (ethereum) {
@@ -169,7 +170,7 @@ const AppProvider = ({ children }) => {
     return (
         <AppContext.Provider value={{
             // account, connectWallet, error, balance, count, refreshCounter, incrementCounter, setNumber
-            account, connectWallet, error, balance, createAsset, fetchAllAssets, buyShares, sellShares, checkUserShareOwnership
+            account, connectWallet, error, balance, createAsset, fetchAllAssets, buyShares, sellShares, checkUserShareOwnership, getContractBalance
         }}>
             {children}
         </AppContext.Provider>

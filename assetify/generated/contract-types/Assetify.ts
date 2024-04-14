@@ -59,10 +59,12 @@ export interface AssetifyInterface extends utils.Interface {
     "addAssetImage(uint256,string)": FunctionFragment;
     "assetShares(uint256,address)": FunctionFragment;
     "assets(uint256)": FunctionFragment;
+    "balances(uint256)": FunctionFragment;
     "buyShares(uint256,uint256)": FunctionFragment;
     "createAsset(string,uint256,uint256,string[])": FunctionFragment;
     "getAllAssets()": FunctionFragment;
     "getAssetImages(uint256)": FunctionFragment;
+    "getContractBalance()": FunctionFragment;
     "getCurrentPrice(uint256)": FunctionFragment;
     "getUserPortfolio(address)": FunctionFragment;
     "getUserShares(uint256,address)": FunctionFragment;
@@ -74,10 +76,12 @@ export interface AssetifyInterface extends utils.Interface {
       | "addAssetImage"
       | "assetShares"
       | "assets"
+      | "balances"
       | "buyShares"
       | "createAsset"
       | "getAllAssets"
       | "getAssetImages"
+      | "getContractBalance"
       | "getCurrentPrice"
       | "getUserPortfolio"
       | "getUserShares"
@@ -97,6 +101,10 @@ export interface AssetifyInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "balances",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "buyShares",
     values: [BigNumberish, BigNumberish]
   ): string;
@@ -111,6 +119,10 @@ export interface AssetifyInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getAssetImages",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getContractBalance",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getCurrentPrice",
@@ -138,6 +150,7 @@ export interface AssetifyInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "assets", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "balances", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buyShares", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createAsset",
@@ -149,6 +162,10 @@ export interface AssetifyInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getAssetImages",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getContractBalance",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -281,6 +298,11 @@ export interface Assetify extends BaseContract {
       }
     >;
 
+    balances(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     buyShares(
       assetId: BigNumberish,
       sharesToBuy: BigNumberish,
@@ -304,6 +326,8 @@ export interface Assetify extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string[]]>;
 
+    getContractBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getCurrentPrice(
       assetId: BigNumberish,
       overrides?: CallOverrides
@@ -323,7 +347,7 @@ export interface Assetify extends BaseContract {
     sellShares(
       assetId: BigNumberish,
       sharesToSell: BigNumberish,
-      overrides?: Overrides & { from?: string }
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<ContractTransaction>;
   };
 
@@ -352,6 +376,8 @@ export interface Assetify extends BaseContract {
     }
   >;
 
+  balances(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
   buyShares(
     assetId: BigNumberish,
     sharesToBuy: BigNumberish,
@@ -375,6 +401,8 @@ export interface Assetify extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string[]>;
 
+  getContractBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
   getCurrentPrice(
     assetId: BigNumberish,
     overrides?: CallOverrides
@@ -394,7 +422,7 @@ export interface Assetify extends BaseContract {
   sellShares(
     assetId: BigNumberish,
     sharesToSell: BigNumberish,
-    overrides?: Overrides & { from?: string }
+    overrides?: PayableOverrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -423,6 +451,8 @@ export interface Assetify extends BaseContract {
       }
     >;
 
+    balances(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     buyShares(
       assetId: BigNumberish,
       sharesToBuy: BigNumberish,
@@ -445,6 +475,8 @@ export interface Assetify extends BaseContract {
       assetId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string[]>;
+
+    getContractBalance(overrides?: CallOverrides): Promise<BigNumber>;
 
     getCurrentPrice(
       assetId: BigNumberish,
@@ -536,6 +568,8 @@ export interface Assetify extends BaseContract {
 
     assets(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
+    balances(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     buyShares(
       assetId: BigNumberish,
       sharesToBuy: BigNumberish,
@@ -557,6 +591,8 @@ export interface Assetify extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getContractBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
     getCurrentPrice(
       assetId: BigNumberish,
       overrides?: CallOverrides
@@ -576,7 +612,7 @@ export interface Assetify extends BaseContract {
     sellShares(
       assetId: BigNumberish,
       sharesToSell: BigNumberish,
-      overrides?: Overrides & { from?: string }
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<BigNumber>;
   };
 
@@ -594,6 +630,11 @@ export interface Assetify extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     assets(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    balances(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -619,6 +660,10 @@ export interface Assetify extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getContractBalance(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getCurrentPrice(
       assetId: BigNumberish,
       overrides?: CallOverrides
@@ -638,7 +683,7 @@ export interface Assetify extends BaseContract {
     sellShares(
       assetId: BigNumberish,
       sharesToSell: BigNumberish,
-      overrides?: Overrides & { from?: string }
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<PopulatedTransaction>;
   };
 }

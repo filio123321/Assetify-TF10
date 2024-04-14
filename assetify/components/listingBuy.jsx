@@ -63,6 +63,7 @@ function SharesForm(props) {
 
     const { account, buyShares, error } = useContext(AppContext);
     const [sharesToBuy, setSharesToBuy] = useState(1);
+    const [estimatedCost, setEstimatedCost] = useState(asset.pricePerShare);
     const [errorShares, setErrorShares] = useState(null);
 
     const form = useForm({
@@ -72,8 +73,13 @@ function SharesForm(props) {
         }
     });
 
-    const onSubmit = (data) => {
-        buyShares(asset.assetId, data.shares, parseFloat(sharesToBuy) * parseFloat(asset.pricePerShare));
+    const onSubmit = async () => {
+        if (sharesToBuy > 0 && parseFloat(sharesToBuy) <= parseFloat(asset.sharesAvailable)) {
+            await buyShares(asset.assetId, sharesToBuy, estimatedCost);
+        } else {
+            console.error("Invalid number of shares");
+            console.log("Shares to buy", sharesToBuy, asset.sharesAvailable, parseFloat(sharesToBuy) > parseFloat(asset.sharesAvailable));
+        }
     };
 
     useEffect(() => {
@@ -85,6 +91,19 @@ function SharesForm(props) {
             setErrorShares(null);
         }
     }, [sharesToBuy, asset.sharesAvailable]);
+
+    useEffect(() => {
+        // Calculate estimated cost with the incremental pricing model
+        let cost = 0;
+        let currentPrice = parseFloat(asset.pricePerShare);
+        for (let i = 0; i < sharesToBuy; i++) {
+            cost += currentPrice;
+            currentPrice += currentPrice / asset.totalShares;
+        }
+
+        cost = cost + (cost * 0.03); // Add 10% fee
+        setEstimatedCost(cost);
+    }, [sharesToBuy, asset]);
 
     return (
         <Form {...form}>
