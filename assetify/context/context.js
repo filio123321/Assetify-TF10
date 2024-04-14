@@ -12,7 +12,7 @@ const AppProvider = ({ children }) => {
     const [account, setAccount] = useState("");
     const [balance, setBalance] = useState("");
     // const [count, setCount] = useState(0);   
-    const [error, setError] =   useState("");
+    const [error, setError] = useState("");
 
 
 
@@ -108,7 +108,7 @@ const AppProvider = ({ children }) => {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const signer = await provider.getSigner();
             const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
-            const tx = await assetify.buyShares(assetId, sharesToBuy, { value: ethers.utils.parseEther(value.toString()) });
+            const tx = await assetify.buyShares(assetId, sharesToBuy, { value: ethers.utils.parseEther(value.toString()), gasLimit: 100000});
             await tx.wait();
             console.log("Shares bought successfully");
         } catch (err) {
@@ -125,7 +125,9 @@ const AppProvider = ({ children }) => {
             const provider = new ethers.providers.Web3Provider(ethereum);
             const signer = await provider.getSigner();
             const assetify = Assetify__factory.connect(ASSETIFY_ADDRESS, signer);
-            const tx = await assetify.sellShares(assetId, sharesToSell);
+            const tx = await assetify.sellShares(assetId, sharesToSell, {
+                gasLimit: 100000 // Example gas limit; adjust based on needs and tests
+            });
             await tx.wait();
             console.log("Shares sold successfully");
         } catch (err) {
