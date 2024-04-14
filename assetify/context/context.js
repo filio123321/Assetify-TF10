@@ -6,13 +6,13 @@ import { Assetify__factory } from '@/generated/contract-types';
 export const AppContext = createContext();
 
 const { ethereum } = typeof window !== "undefined" ? window : {};
-const ASSETIFY_ADDRESS = '0x566738A90b395eB3d33752f2C52E5b8b1f72AC90';
+const ASSETIFY_ADDRESS = '0xaF3b5Ab864F41c6b5377Ac94A3086d653b1F2018';
 
 const AppProvider = ({ children }) => {
     const [account, setAccount] = useState("");
     const [balance, setBalance] = useState("");
-    // const [count, setCount] = useState(0);
-    const [error, setError] = useState("");
+    // const [count, setCount] = useState(0);   
+    const [error, setError] =   useState("");
 
 
 
@@ -116,6 +116,7 @@ const AppProvider = ({ children }) => {
             setError(err || "Failed to buy shares");
         }
     };
+
 
     // Function to sell shares
     const sellShares = async (assetId, sharesToSell) => {

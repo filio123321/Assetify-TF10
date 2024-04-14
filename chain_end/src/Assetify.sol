@@ -101,14 +101,6 @@ contract Assetify {
     }
 
     function buyShares(uint256 assetId, uint256 sharesToBuy) public payable {
-        // require(assetId < assets.length, "Asset does not exist");
-        // Asset storage asset = assets[assetId];
-        // require(
-        //     sharesToBuy <= asset.sharesAvailable,
-        //     "Not enough shares available"
-        // );
-        // uint256 cost = sharesToBuy * asset.pricePerShare;
-        // require(msg.value >= cost, "Not enough ETH sent");
         require(assetId < assets.length, "Asset does not exist");
         Asset storage asset = assets[assetId];
         require(
@@ -121,17 +113,13 @@ contract Assetify {
         asset.sharesAvailable -= sharesToBuy;
         assetShares[assetId][msg.sender] += sharesToBuy;
 
-        // Transfer the cost to the asset's owner
         payable(asset.owner).transfer(cost);
 
-        // If there's any excess Ether sent, refund it back to the buyer
         if (msg.value > cost) {
             payable(msg.sender).transfer(msg.value - cost);
         }
 
-        // Dynamic price adjustment based on the ratio of shares bought to total shares
-        uint256 priceAdjustment = (msg.value / asset.totalShares) *
-            (sharesToBuy / asset.totalShares);
+        uint256 priceAdjustment = (cost * sharesToBuy) / asset.totalShares;
         asset.pricePerShare += priceAdjustment;
 
         emit SharesPurchased(
@@ -155,9 +143,12 @@ contract Assetify {
         assetShares[assetId][msg.sender] -= sharesToSell;
 
         // Dynamic price adjustment based on the ratio of shares sold to total shares
-        uint256 priceAdjustment = (proceeds / asset.totalShares) *
-            (sharesToSell / asset.totalShares);
-        asset.pricePerShare -= priceAdjustment;
+        uint256 priceAdjustment = (proceeds * sharesToSell) / asset.totalShares;
+        if (asset.pricePerShare > priceAdjustment) {
+            asset.pricePerShare -= priceAdjustment;
+        } else {
+            asset.pricePerShare = 0; // Avoid negative pricing in extreme cases
+        }
 
         payable(msg.sender).transfer(proceeds);
 

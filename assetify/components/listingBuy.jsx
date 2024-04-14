@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Image } from "@nextui-org/react";
 import { AppContext } from "@/context/context";
 import {
@@ -49,8 +49,11 @@ import {
 
 
 const FormSchema = z.object({
-    shares: z.number().int().positive(),
-})
+    shares: z.number().int().positive().or(z.string().nonempty("Please enter a number")).transform(Number)
+}).refine((data) => data.shares > 0, {
+    message: "Shares must be a positive number",
+    path: ["shares"],
+});
 
 function SharesForm(props) {
     const { className, asset } = props;
@@ -58,7 +61,9 @@ function SharesForm(props) {
         resolver: zodResolver(FormSchema)
     });
 
-    const { account, buyShares } = useContext(AppContext);
+    const { account, buyShares, error } = useContext(AppContext);
+    const [sharesToBuy, setSharesToBuy] = useState(1);
+    const [errorShares, setErrorShares] = useState(null);
 
     const form = useForm({
         resolver: zodResolver(FormSchema),
@@ -68,39 +73,77 @@ function SharesForm(props) {
     });
 
     const onSubmit = (data) => {
-        console.log(data);
+        buyShares(asset.assetId, data.shares, parseFloat(sharesToBuy) * parseFloat(asset.pricePerShare));
     };
+
+    useEffect(() => {
+        if (parseFloat(sharesToBuy) > parseFloat(asset.sharesAvailable)) {
+            // setSharesToBuy(asset.sharesAvailable);
+            setErrorShares("Not enough shares available");
+            // console.log("Shares to buy", sharesToBuy, asset.sharesAvailable, parseFloat(sharesToBuy) > parseFloat(asset.sharesAvailable));
+        } else {
+            setErrorShares(null);
+        }
+    }, [sharesToBuy, asset.sharesAvailable]);
 
     return (
         <Form {...form}>
             <form className={cn("grid items-start gap-4", className)} onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid gap-2">
                     {/* courasel */}
-                    <Carousel className="w-full mix-w-max">
+                    <Carousel className="w-full max-w-full overflow-hidden">
                         <CarouselContent className="flex align-center">
                             {asset.ipfsHashes.map((ipfsImageHash, index) => (
-                                <CarouselItem key={index} className="flex">
-                                    <div className="p-1 flex  items-center" >
-                                        <Image
-                                            alt="Card background"
-                                            className={`object-cover rounded-xl w-full aspect-auto max-h-screen`}
-                                            src={`https://ipfs.io/ipfs/${ipfsImageHash && ipfsImageHash.split('ipfs://')[1]}`}
-                                            // width={200}
-                                            height={200}
-                                            draggable={false}
-                                        />
-                                    </div>
+                                <CarouselItem key={index} className="flex justify-center items-center p-1">
+                                    <Image
+                                        alt="Card background"
+                                        className="object-cover rounded-xl max-h-[80vh] w-auto"
+                                        src={`https://ipfs.io/ipfs/${ipfsImageHash.split('ipfs://')[1]}`}
+                                        draggable={false}
+                                    />
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        <CarouselPrevious className="absolute top-1/2 left-0 transform -translate-y-1/2" />
-                        <CarouselNext className="absolute top-1/2 right-0 transform -translate-y-1/2" />
+                        <CarouselPrevious className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10" />
+                        <CarouselNext className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10" />
                     </Carousel>
 
 
-                    <Label htmlFor="shares">How many shares</Label>
-                    <Input type="number" id="shares" {...register("shares")} />
-                    {errors.shares && <FormMessage type="error">{errors.shares.message}</FormMessage>}
+
+                    {/* <Label htmlFor="shares">How many shares</Label>
+                    <Input type="number" id="shares" {...register("shares")} /> */}
+
+                    <FormField
+                        control={form.control}
+                        error={errors.shares}
+                        name="shares"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel htmlFor="shares">How many shares {asset.pricePerShare}</FormLabel>
+                                <FormControl>
+                                    {/* <Input placeholder={asset.sharesAvailable} {...field} /> */}
+                                    <Input
+                                        placeholder={asset.sharesAvailable}
+                                        {...field}
+                                        onChange={(e) => setSharesToBuy(e.target.value)} value={sharesToBuy}
+                                        {...register("shares", {
+                                            onChange: (e) => setSharesToBuy(e.target.value), // Update state on change
+                                        })}
+                                    />
+                                </FormControl>
+                                {/* <FormDescription>ETH {asset.pricePerShare}</FormDescription> */}
+                                {errors.shares && <FormMessage type="error" className="text-red-500">{errors.shares.message}</FormMessage>}
+                                {errorShares && <FormMessage type="error" className="text-red-500">{errorShares}</FormMessage>}
+                                {/* {error && <FormMessage type="error" className="text-red-500">{error.data.message}</FormMessage>} */}
+
+                                <div className="flex justify-between">
+                                    <FormMessage className="text-white">EST. PRICE</FormMessage>
+                                    <FormMessage className="text-white">ETH {(asset.pricePerShare * sharesToBuy).toFixed(3)}</FormMessage>
+                                </div>
+                            </FormItem>
+                        )}
+                    />
+                    <FormMessage />
                 </div>
                 <Button type="submit">Buy</Button>
             </form>

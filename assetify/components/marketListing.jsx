@@ -47,7 +47,7 @@ function MarketListing(props) {
             <Card className="py-4 h-full break-inside-avoid mb-4 justify-center" onPress={() => console.log("CLIECKED")} isPressable>
                 <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                     <p className="text-tiny uppercase font-bold">Available {asset.sharesAvailable}/{asset.totalShares}</p>
-                    <small className="text-default-500">{asset.pricePerShare} ETH</small>
+                    <small className="text-default-500">{parseFloat(asset.pricePerShare).toFixed(6)} ETH</small>
                     <h4 className="font-bold text-large">{asset.name}</h4>
                 </CardHeader>
                 <CardBody className="overflow-visible py-2">
@@ -87,7 +87,7 @@ function MarketListing(props) {
                 <Button className="w-full mx-1" color="success">Buy</Button> */}
                     {/* <Button className="w-full mx-1" color="danger" disabled={!ownsShares}>Sell</Button> */}
                     {ownsShares && <Button className="w-full mx-1" color="danger">Sell</Button>}
-                    <Button className="w-full mx-1" color="success" onClick={() => setOpenBuyMenu(true)}>Buy</Button>
+                    <Button className="w-full mx-1 text-white" color="success" onClick={() => setOpenBuyMenu(true)} isDisabled={parseInt(asset.sharesAvailable) === 0}>Buy</Button>
                 </CardFooter>
             </Card>
 
