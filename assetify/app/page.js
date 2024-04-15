@@ -32,7 +32,7 @@ export default function Home() {
             }
 
           >
-            <Image
+            {/* <Image
               src="/marketplace_ss.png"
               layout="responsive"
               width={1}
@@ -40,7 +40,9 @@ export default function Home() {
               alt="Assetofy Crypto trader transparent background laptop and phone image"
               className="mx-auto rounded-2xl object-contain h-full w-full"
               draggable={false}
-            />
+            /> */}
+
+            <iframe className='rounded-2xl h-full w-full' src="https://www.youtube.com/embed/nyTA5NxHLIQ?si=tcQQ9i4t77okOCpm" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
           </ContainerScroll>
         </div>
