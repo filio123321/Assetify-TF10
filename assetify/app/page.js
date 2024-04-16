@@ -150,7 +150,7 @@ export default function Home() {
                     <span className="text-lg text-zinc-400/80">
                       Technologies
                     </span>
-                    <div className="flex">
+                    <div className="flex mt-2">
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Figma-Dark.svg"}
                         layout="responsive"
@@ -186,7 +186,7 @@ export default function Home() {
                     <span className="text-lg text-zinc-400/80">
                       Socials
                     </span>
-                    <div className="flex">
+                    <div className="flex mt-2">
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/LinkedIn.svg"}
                         layout="responsive"
@@ -242,7 +242,7 @@ export default function Home() {
                     <span className="text-lg text-zinc-400/80">
                       Technologies
                     </span>
-                    <div className="flex justify-end">
+                    <div className="flex mt-2 justify-end">
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/NextJS-Dark.svg"}
                         layout="responsive"
@@ -287,7 +287,7 @@ export default function Home() {
                     <span className="text-lg text-zinc-400/80">
                       Socials
                     </span>
-                    <div className="flex">
+                    <div className="flex mt-2">
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/LinkedIn.svg"}
                         layout="responsive"
@@ -326,7 +326,7 @@ export default function Home() {
               </div>
 
 
-              <Card title="Hristiyana Angelova" icon={<Filostratos />}>
+              <Card title="Filostratos Titopoulos" icon={<Filostratos />}>
                 <CanvasRevealEffect
                   animationSpeed={3}
                   containerClassName="bg-black"
