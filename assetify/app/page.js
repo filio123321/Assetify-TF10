@@ -6,12 +6,12 @@ import { useMediaQuery } from '@react-hook/media-query'
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from "framer-motion";
 
-
 import { AppContext } from "@/context/context";
 
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from "@/components/ui/textarea"
+import { Divider, Tooltip } from "@nextui-org/react";
 
 import { ContainerScroll } from '@/components/container-scroll-animation';
 import { LampWhatIsAssetify } from '@/components/lamp';
@@ -19,6 +19,23 @@ import { CanvasRevealEffect } from '@/components/canvasRevealEffect';
 
 export default function Home() {
   const [isDesktop, setIsDesktop] = useState(false);
+
+  const Hristiyana = () => {
+    return (
+      <div className="text-white">
+        Hristiyana Angelova
+      </div>
+    )
+  }
+
+  const Filostratos = () => {
+    return (
+      <div className="text-white">
+        Filostratos Titopoulos
+      </div>
+    )
+  }
+
 
   useEffect(() => {
     setIsDesktop(window.innerWidth > 768);
@@ -28,6 +45,8 @@ export default function Home() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+
   return (
     <>
       <div className='gradient z-0' />
@@ -85,7 +104,6 @@ export default function Home() {
           </div>
 
           {/* Who are we? */}
-
           {/* Text saying Who are we? */}
           <div className="mx-auto max-w-7xl p-6 py-16 md:py-24 lg:px-8">
             <div className="w-full flex md:justify-center lg:justify-center sm:justify-start">
@@ -97,10 +115,9 @@ export default function Home() {
             </div>
           </div>
 
-
-          <div className="grid items-start justify-between gap-5 md:grid-cols-2">
-            <div className="pr-8 text-3xl/[1.07] font-bold tracking-tight md:pr-16 md:text-4xl/[1.07]">
-              <Card title="Hristiyana Angelova" icon={<AceternityIcon />}>
+          <div className="mx-auto max-w-7xl p-6 py-16 md:py-24 lg:px-8">
+            <div className="grid items-start  gap-5 md:grid-cols-2">
+              <Card title="Hristiyana Angelova" icon={<Hristiyana />}>
                 <CanvasRevealEffect
                   animationSpeed={3}
                   containerClassName="bg-black"
@@ -110,18 +127,290 @@ export default function Home() {
                   ]}
                   dotSize={2}
                 />
+                {/* <Image
+                  src={"/hrisi.png"}
+                  layout="responsive"
+                  width={1}
+                  height={1}
+                  alt="Hristiyana Angelova"
+                  className="mx-auto rounded-2xl object-contain h-full w-full over"
+                  draggable={false}
+                /> */}
               </Card>
+
+
+              {/* <div className='flex justify-start'> */}
+              <div className='flex-row'>
+                <div className="text-3xl/[1.07] font-bold tracking-tight md:text-4xl/[1.07]">
+                  <span>
+                    Hristiyana Angelova
+                  </span>
+
+                  <div className="mt-4">
+                    <span className="text-lg text-zinc-400/80">
+                      Technologies
+                    </span>
+                    <div className="flex">
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Figma-Dark.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="Figma"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                      />
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/React-Dark.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="ReactJS"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                      />
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/TailwindCSS-Dark.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="TailwindCSS"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                      />
+
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <span className="text-lg text-zinc-400/80">
+                      Socials
+                    </span>
+                    <div className="flex">
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/LinkedIn.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="LinkedIn"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                        onClick={() => window.open('https://www.linkedin.com/in/hristiyana-angelova-05732a255/')}
+                      />
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Instagram.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="Instagram"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                        onClick={() => window.open('https://www.instagram.com/hristiyanaangelova/')}
+                      />
+                      <Tooltip content="hristiyana.v.angelova.2020@elsys-bg.org">
+                        <Image
+                          src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Gmail-Light.svg"}
+                          layout="responsive"
+                          width={64}
+                          height={64}
+                          alt="Gmail"
+                          className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                          draggable={false}
+                        />
+                      </Tooltip>
+                    </div>
+                  </div>
+
+
+
+                </div>
+              </div>
+
             </div>
 
+            <Divider className="my-4" />
 
-            <div className="text-lg text-zinc-400/80">
-              <Card title="Filostratos Titopoulos" icon={<AceternityIcon />}>
+            <div className="grid items-start  gap-5 md:grid-cols-2">
+
+              <div className='flex-row justify-end'>
+                <div className="text-3xl/[1.07] font-bold tracking-tight md:text-4xl/[1.07]">
+                  <span>
+                    Filostratos Titopoulos
+                  </span>
+
+                  <div className="mt-4">
+                    <span className="text-lg text-zinc-400/80">
+                      Technologies
+                    </span>
+                    <div className="flex justify-end">
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/NextJS-Dark.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="NextJS"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                      />
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/React-Dark.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="ReactJS"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                      />
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/TailwindCSS-Dark.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="TailwindCSS"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                      />
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Solidity.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="Figma"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                      />
+
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <span className="text-lg text-zinc-400/80">
+                      Socials
+                    </span>
+                    <div className="flex">
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/LinkedIn.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="LinkedIn"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                        onClick={() => window.open('https://www.linkedin.com/in/filostratos-titopoulos-308a91254/')}
+                      />
+                      <Image
+                        src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Instagram.svg"}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        alt="Instagram"
+                        className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                        draggable={false}
+                        onClick={() => window.open('https://www.instagram.com/_shushi_man_/')}
+                      />
+                      <Tooltip content="ftitopoulos@gmail.com">
+                        <Image
+                          src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Gmail-Light.svg"}
+                          layout="responsive"
+                          width={64}
+                          height={64}
+                          alt="Gmail"
+                          className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                          draggable={false}
+                        />
+                      </Tooltip>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <Card title="Hristiyana Angelova" icon={<Filostratos />}>
                 <CanvasRevealEffect
-                  animationSpeed={5.1}
-                  containerClassName="bg-emerald-900"
+                  animationSpeed={3}
+                  containerClassName="bg-black"
+                  colors={[
+                    [236, 72, 153],
+                    [232, 121, 249],
+                  ]}
+                  dotSize={2}
                 />
+                {/* <Image
+                  src={"/hrisi.png"}
+                  layout="responsive"
+                  width={1}
+                  height={1}
+                  alt="Hristiyana Angelova"
+                  className="mx-auto rounded-2xl object-contain h-full w-full over"
+                  draggable={false}
+                /> */}
               </Card>
+
+
+              {/* <div className='flex justify-start'> */}
+
             </div>
+
+            {/* <div className="grid items-start justify-between gap-5 md:grid-cols-2 py-4">
+              <div className='flex justify-end'>
+                <div className="text-3xl/[1.07] font-bold tracking-tight md:text-4xl/[1.07]">
+                  <span>
+                    Filostratos Titopoulos
+                  </span>
+                </div>
+
+
+                <div>
+                  <Image
+                    src={"https://github.com/tandpfun/skill-icons/raw/main/icons/NextJS-Dark.svg"}
+                    layout="responsive"
+                    width={64}
+                    height={64}
+                    alt="NextJS"
+                    className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                    draggable={false}
+                  />
+                  <Image
+                    src={"https://github.com/tandpfun/skill-icons/raw/main/icons/React-Dark.svg"}
+                    layout="responsive"
+                    width={64}
+                    height={64}
+                    alt="ReactJS"
+                    className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                    draggable={false}
+                  />
+                  <Image
+                    src={"https://github.com/tandpfun/skill-icons/raw/main/icons/TailwindCSS-Dark.svg"}
+                    layout="responsive"
+                    width={64}
+                    height={64}
+                    alt="TailwindCSS"
+                    className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                    draggable={false}
+                  />
+                  <Image
+                    src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Solidity.svg"}
+                    layout="responsive"
+                    width={64}
+                    height={64}
+                    alt="Figma"
+                    className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
+                    draggable={false}
+                  />
+                </div>
+              </div>
+
+
+              <div className='flex justify-start '>
+                <Card title="Filostratos Titopoulos" icon={<Filostratos />}>
+                  <CanvasRevealEffect
+                    animationSpeed={5.1}
+                    containerClassName="bg-emerald-900"
+                  />
+                </Card>
+              </div>
+            </div> */}
 
           </div>
 
@@ -179,27 +468,6 @@ const Card = ({
   );
 };
 
-const AceternityIcon = () => {
-  return (
-    <svg
-      width="66"
-      height="65"
-      viewBox="0 0 66 65"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-10 w-10 text-black dark:text-white group-hover/canvas-card:text-white "
-    >
-      <path
-        d="M8 8.05571C8 8.05571 54.9009 18.1782 57.8687 30.062C60.8365 41.9458 9.05432 57.4696 9.05432 57.4696"
-        stroke="currentColor"
-        strokeWidth="15"
-        strokeMiterlimit="3.86874"
-        strokeLinecap="round"
-        style={{ mixBlendMode: "darken" }}
-      />
-    </svg>
-  );
-};
 
 export const Icon = ({ className, ...rest }) => {
   return (
