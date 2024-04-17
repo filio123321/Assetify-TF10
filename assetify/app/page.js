@@ -17,6 +17,9 @@ import { ContainerScroll } from '@/components/container-scroll-animation';
 import { LampWhatIsAssetify } from '@/components/lamp';
 import { CanvasRevealEffect } from '@/components/canvasRevealEffect';
 
+import { FaLink } from "react-icons/fa6";
+
+
 export default function Home() {
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -366,10 +369,69 @@ export default function Home() {
             </div>
           </div>
 
+          <div className="mx-auto max-w-7xl p-6 pt-16 md:py-24 lg:px-8">
+            <div className="grid items-start  gap-5 md:grid-cols-2">
+              <iframe className='rounded-2xl h-full w-full min-w-max aspect-video' src="https://www.youtube.com/embed/YidZn1lc3r8?si=kLTRwpuiPrYyCYSP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+              {/* <div className='flex justify-start'> */}
+              <div className='flex-row'>
+                <div className="text-3xl/[1.07] font-bold tracking-tight md:text-4xl/[1.07]">
+
+                  <div className="flex justify-between">
+                    <span className='text-pink-500'>
+                      Sugar Storm
+                    </span>
+
+                    <div className='hover:text-pink-500 cursor-pointer' onClick={() => window.open('https://tuesfest.bg/projects/128')}>
+                      <FaLink onClick={() => window.open('https://tuesfest.bg/projects/128')} />
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <span className="text-lg text-zinc-400/80">
+                      <span className='from-pink-500 to-pink-600 bg-gradient-to-br bg-clip-text text-transparent' >Sugar Storm</span> is a cotton candy machine that is <span className='text-white'>easy</span> to <span className='text-white'>operate</span> and <span className='text-white'>maintain</span> at home without the use of propane-butane, offering <span className='text-white underline decoration-pink-500'>automatic</span> cotton candy making without human intervention. The addition of sugar and collection of the finished cotton candy is <span className='text-white'>entirely done by the machine</span>. All this with the    push of a button!
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <Divider className="my-8" />
+
+            <div className="grid items-start  gap-5 md:grid-cols-2">
+
+              <div className='flex-row justify-end'>
+                <div className="text-3xl/[1.07] font-bold tracking-tight md:text-4xl/[1.07]">
+                  <div className="flex justify-between">
+                    <span>
+                      CryptiX
+                    </span>
+                    <div className='hover:text-pink-500 cursor-pointer' onClick={() => window.open('https://2023.tuesfest.bg/projects/428')}>
+                      <FaLink onClick={() => window.open('https://2023.tuesfest.bg/projects/428')} />
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <span className="text-lg text-zinc-400/80">
+                      CryptiX is an application for Android and iOS. It is a crypto wallet that allows our users to easily and conveniently shop with cryptocurrencies everywhere. Transactions can be carried out contactlessly - via QR code or NFC.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+
+              {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/L0k4ppzaMpg?si=KAMPHJM7Fe7sI6OM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> */}
+              <iframe className='rounded-2xl h-full w-full min-w-max aspect-video' src="https://www.youtube.com/embed/L0k4ppzaMpg?si=KAMPHJM7Fe7sI6OM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+            </div>
+          </div>
 
 
 
-          
+
         </div >
       </main>
 
