@@ -115,7 +115,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mx-auto max-w-7xl p-6 py-16 md:py-24 lg:px-8">
+          <div className="mx-auto max-w-7xl p-6 pt-16 md:py-24 lg:px-8">
             <div className="grid items-start  gap-5 md:grid-cols-2">
               <Card title="Hristiyana Angelova" icon={<Hristiyana />}>
                 <CanvasRevealEffect
@@ -153,7 +153,7 @@ export default function Home() {
                     <div className="flex mt-2">
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Figma-Dark.svg"}
-                        layout="responsive"
+                        // // layout="responsive"
                         width={64}
                         height={64}
                         alt="Figma"
@@ -162,7 +162,7 @@ export default function Home() {
                       />
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/React-Dark.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="ReactJS"
@@ -171,7 +171,7 @@ export default function Home() {
                       />
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/TailwindCSS-Dark.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="TailwindCSS"
@@ -189,7 +189,7 @@ export default function Home() {
                     <div className="flex mt-2">
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/LinkedIn.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="LinkedIn"
@@ -199,7 +199,7 @@ export default function Home() {
                       />
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Instagram.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="Instagram"
@@ -210,12 +210,13 @@ export default function Home() {
                       <Tooltip content="hristiyana.v.angelova.2020@elsys-bg.org">
                         <Image
                           src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Gmail-Light.svg"}
-                          layout="responsive"
+                          // layout="responsive"
                           width={64}
                           height={64}
                           alt="Gmail"
                           className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
                           draggable={false}
+                          onClick={() => window.open('mailto:hristiyana.v.angelova.2020@elsys-bg.org')}
                         />
                       </Tooltip>
                     </div>
@@ -228,7 +229,7 @@ export default function Home() {
 
             </div>
 
-            <Divider className="my-4" />
+            <Divider className="my-8" />
 
             <div className="grid items-start  gap-5 md:grid-cols-2">
 
@@ -245,7 +246,7 @@ export default function Home() {
                     <div className="flex mt-2 justify-end">
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/NextJS-Dark.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="NextJS"
@@ -254,7 +255,7 @@ export default function Home() {
                       />
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/React-Dark.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="ReactJS"
@@ -263,7 +264,7 @@ export default function Home() {
                       />
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/TailwindCSS-Dark.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="TailwindCSS"
@@ -272,7 +273,7 @@ export default function Home() {
                       />
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Solidity.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="Figma"
@@ -290,7 +291,7 @@ export default function Home() {
                     <div className="flex mt-2">
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/LinkedIn.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="LinkedIn"
@@ -300,7 +301,7 @@ export default function Home() {
                       />
                       <Image
                         src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Instagram.svg"}
-                        layout="responsive"
+                        // layout="responsive"
                         width={64}
                         height={64}
                         alt="Instagram"
@@ -311,12 +312,13 @@ export default function Home() {
                       <Tooltip content="ftitopoulos@gmail.com">
                         <Image
                           src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Gmail-Light.svg"}
-                          layout="responsive"
+                          // layout="responsive"
                           width={64}
                           height={64}
                           alt="Gmail"
                           className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
                           draggable={false}
+                          onClick={() => window.open('mailto:ftitopoulos@gmail.com')}
                         />
                       </Tooltip>
                     </div>
@@ -352,71 +354,23 @@ export default function Home() {
 
             </div>
 
-            {/* <div className="grid items-start justify-between gap-5 md:grid-cols-2 py-4">
-              <div className='flex justify-end'>
-                <div className="text-3xl/[1.07] font-bold tracking-tight md:text-4xl/[1.07]">
-                  <span>
-                    Filostratos Titopoulos
-                  </span>
-                </div>
+          </div>
 
-
-                <div>
-                  <Image
-                    src={"https://github.com/tandpfun/skill-icons/raw/main/icons/NextJS-Dark.svg"}
-                    layout="responsive"
-                    width={64}
-                    height={64}
-                    alt="NextJS"
-                    className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
-                    draggable={false}
-                  />
-                  <Image
-                    src={"https://github.com/tandpfun/skill-icons/raw/main/icons/React-Dark.svg"}
-                    layout="responsive"
-                    width={64}
-                    height={64}
-                    alt="ReactJS"
-                    className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
-                    draggable={false}
-                  />
-                  <Image
-                    src={"https://github.com/tandpfun/skill-icons/raw/main/icons/TailwindCSS-Dark.svg"}
-                    layout="responsive"
-                    width={64}
-                    height={64}
-                    alt="TailwindCSS"
-                    className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
-                    draggable={false}
-                  />
-                  <Image
-                    src={"https://github.com/tandpfun/skill-icons/raw/main/icons/Solidity.svg"}
-                    layout="responsive"
-                    width={64}
-                    height={64}
-                    alt="Figma"
-                    className="mx-auto rounded-2xl object-contain max-h-16 max-w-16"
-                    draggable={false}
-                  />
-                </div>
+          <div className="mx-auto max-w-7xl p-6 py-16 md:py-24 lg:px-8">
+            <div className="w-full flex md:justify-center lg:justify-center sm:justify-start">
+              <div className="pr-8 text-3xl/[1.07] font-bold tracking-tight md:pr-16 md:text-4xl/[1.07]">
+                <span className="bg-gradient-to-br from-white to-zinc-500 bg-clip-text text-transparent">
+                  Past Projects
+                </span>
               </div>
-
-
-              <div className='flex justify-start '>
-                <Card title="Filostratos Titopoulos" icon={<Filostratos />}>
-                  <CanvasRevealEffect
-                    animationSpeed={5.1}
-                    containerClassName="bg-emerald-900"
-                  />
-                </Card>
-              </div>
-            </div> */}
-
+            </div>
           </div>
 
 
-        </div >
 
+
+          
+        </div >
       </main>
 
 
