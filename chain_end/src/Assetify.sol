@@ -9,6 +9,8 @@ contract Assetify {
         uint256 pricePerShare;
         address owner;
         string[] ipfsHashes;
+        bool isIncomeGenerating;
+        mapping(address => uint256) dividendsOwed;
     }
 
     Asset[] public assets;
@@ -17,13 +19,15 @@ contract Assetify {
     mapping(uint256 => mapping(address => uint256)) public assetShares;
     // mapping(address => uint256) public balances;
     mapping(uint256 => uint256) public balances;
+    mapping(uint256 => uint256) public totalIncome;
 
     event AssetCreated(
         uint256 indexed assetId,
         string name,
         uint256 totalShares,
         uint256 pricePerShare,
-        string[] ipfsHashes
+        string[] ipfsHashes,
+        bool isIncomeGenerating
     );
 
     event SharesPurchased(
@@ -39,45 +43,23 @@ contract Assetify {
         uint256 newPricePerShare
     );
     event ImageAdded(uint256 indexed assetId, string ipfsHash);
+    event DividendsDistributed(
+        uint256 indexed assetId,
+        uint256 totalDividends,
+    );
+    event DividendsWithdrawn(
+        address indexed shareholder,
+        uint256 amount
+    );
 
-    // function createAsset(
-    //     string memory name,
-    //     uint256 totalShares,
-    //     uint256 pricePerShare,
-    //     string[] memory ipfsHashes
-    // ) public {
-    //     require(totalShares > 0, "Total shares must be greater than zero");
-    //     require(pricePerShare > 0, "Price per share must be greater than zero");
 
-    //     uint256 assetId = assets.length; // Get ID based on current length before push
-    //     assets.push(
-    //         Asset({
-    //             name: name,
-    //             totalShares: totalShares,
-    //             sharesAvailable: totalShares, // Initially, all shares are available
-    //             pricePerShare: pricePerShare,
-    //             owner: msg.sender,
-    //             ipfsHashes: ipfsHashes
-    //         })
-    //     );
-
-    //     // Here, we explicitly set the creator to own all shares.
-    //     assetShares[assetId][msg.sender] = totalShares;
-
-    //     emit AssetCreated(
-    //         assetId,
-    //         name,
-    //         totalShares,
-    //         pricePerShare,
-    //         ipfsHashes
-    //     );
-    // }
 
     function createAsset(
         string memory name,
         uint256 totalShares,
         uint256 pricePerShare,
-        string[] memory ipfsHashes
+        string[] memory ipfsHashes,
+        bool isIncomeGenerating
     ) public {
         require(totalShares > 0, "Total shares must be greater than zero");
         require(pricePerShare > 0, "Price per share must be greater than zero");
@@ -90,7 +72,8 @@ contract Assetify {
                 sharesAvailable: totalShares,
                 pricePerShare: pricePerShare,
                 owner: msg.sender,
-                ipfsHashes: ipfsHashes
+                ipfsHashes: ipfsHashes,
+                isIncomeGenerating: isIncomeGenerating
             })
         );
         assetShares[assetId][msg.sender] = totalShares;
@@ -99,71 +82,10 @@ contract Assetify {
             name,
             totalShares,
             pricePerShare,
-            ipfsHashes
+            ipfsHashes,
+            isIncomeGenerating
         );
     }
-
-    // function buyShares(uint256 assetId, uint256 sharesToBuy) public payable {
-    //     require(assetId < assets.length, "Asset does not exist");
-    //     Asset storage asset = assets[assetId];
-    //     require(
-    //         msg.sender != asset.owner,
-    //         "Asset owner cannot buy their own shares"
-    //     ); // Ensure the owner cannot buy their own shares
-    //     require(
-    //         sharesToBuy <= asset.sharesAvailable,
-    //         "Not enough shares available"
-    //     );
-    //     uint256 cost = sharesToBuy * asset.pricePerShare;
-    //     require(msg.value >= cost, "Not enough ETH sent");
-
-    //     asset.sharesAvailable -= sharesToBuy;
-    //     assetShares[assetId][msg.sender] += sharesToBuy;
-
-    //     balances[asset.owner] += cost; // Instead of transferring, accumulate the cost in the owner's balance
-
-    //     if (msg.value > cost) {
-    //         payable(msg.sender).transfer(msg.value - cost); // Refund any excess ETH sent
-    //     }
-
-    //     uint256 priceAdjustment = (cost * sharesToBuy) / asset.totalShares;
-    //     asset.pricePerShare += priceAdjustment;
-    //     emit SharesPurchased(
-    //         assetId,
-    //         msg.sender,
-    //         sharesToBuy,
-    //         asset.pricePerShare
-    //     );
-    // }
-
-    // function sellShares(uint256 assetId, uint256 sharesToSell) public {
-    //     require(assetId < assets.length, "Asset does not exist");
-    //     Asset storage asset = assets[assetId];
-    //     require(
-    //         assetShares[assetId][msg.sender] >= sharesToSell,
-    //         "Not enough shares owned"
-    //     );
-
-    //     uint256 proceeds = sharesToSell * asset.pricePerShare;
-    //     require(
-    //         balances[msg.sender] >= proceeds,
-    //         "Insufficient funds in contract to pay out"
-    //     ); // Ensure contract has enough funds to cover the payment
-    //     asset.sharesAvailable += sharesToSell;
-    //     assetShares[assetId][msg.sender] -= sharesToSell;
-
-    //     payable(msg.sender).transfer(proceeds);
-    //     balances[asset.owner] -= proceeds; // Deduct the proceeds from the owner's balance in the contract
-
-    //     uint256 priceAdjustment = (proceeds * sharesToSell) / asset.totalShares;
-    //     if (asset.pricePerShare > priceAdjustment) {
-    //         asset.pricePerShare -= priceAdjustment;
-    //     } else {
-    //         asset.pricePerShare = 0; // Avoid negative pricing in extreme cases
-    //     }
-
-    //     emit SharesSold(assetId, msg.sender, sharesToSell, asset.pricePerShare);
-    // }
 
     function buyShares(uint256 assetId, uint256 sharesToBuy) public payable {
         require(assetId < assets.length, "Asset does not exist");
@@ -300,6 +222,39 @@ contract Assetify {
     function getContractBalance() public view returns (uint256) {
         return address(this).balance;
     }
+
+
+
+    function acceptPayment(uint256 assetId) public payable {
+        require(assetId < assets.length, "Asset does not exist");
+        require(assets[assetId].isIncomeGenerating, "Asset does not generate income");
+
+        totalIncome[assetId] += msg.value;
+        distributeDividends(assetId);
+    }
+
+    function distributeDividends(uint256 assetId) private {
+        Asset storage asset = assets[assetId];
+        uint256 totalDividends = totalIncome[assetId];
+
+        for (uint i = 0; i < assets.length; i++) {
+            uint256 shareholderDividend = (totalDividends * assetShares[assetId][assets[i].owner]) / asset.totalShares;
+            asset.dividendsOwed[assets[i].owner] += shareholderDividend;
+        }
+
+        totalIncome[assetId] = 0; // Reset income after distribution
+        emit DividendsDistributed(assetId, totalDividends);
+    }
+
+    function withdrawDividends(uint256 assetId) public {
+        uint256 owedDividends = assets[assetId].dividendsOwed[msg.sender];
+        require(owedDividends > 0, "No dividends owed");
+
+        assets[assetId].dividendsOwed[msg.sender] = 0;
+        payable(msg.sender).transfer(owedDividends);
+        emit DividendWithdrawn(msg.sender, owedDividends);
+    }
+
 
     // TO ADD ON NEXT DEPLOYMENT
 
