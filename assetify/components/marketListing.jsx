@@ -44,7 +44,7 @@ function MarketListing(props) {
                         <Image
                             alt="Card background"
                             className={`object-cover rounded-xl ${!imageLoaded ? 'hidden' : ''}`}
-                            src={`https://ipfs.io/ipfs/${asset.ipfsHashes[0] && asset.ipfsHashes[0].split('ipfs://')[1]}`}
+                            src={`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0] && asset.ipfsHashes[0].split('ipfs://')[1]}`}
                             width={270}
                             onLoad={handleImageLoad}
                         />
