@@ -32,6 +32,7 @@ export default function CreateListing() {
     const [assetName, setAssetName] = useState('');
     const [totalShares, setTotalShares] = useState(1);
     const [pricePerShare, setPricePerShare] = useState('');
+    const [files, setFiles] = useState([]); // State to handle file input
     const [assets, setAssets] = useState([]);
     const [successMessage, setSuccessMessage] = useState('');
     const [localError, setLocalError] = useState(''); // Local error state to handle form validation errors // razl ot error
@@ -74,15 +75,22 @@ export default function CreateListing() {
         }
     };
 
+    const handleFileChange = (event) => {
+        console.log('Files:', event.target.files);
+        setFiles(event.target.files);
+    };
+
 
     const handleSubmit = async () => {
         setLocalError(''); // Reset local error state
         setSuccessMessage(''); // Reset success message
         setSubmitButtonLoading(true); // Set submit button loading state
         // check if all fields are filled
-        if (!assetName || !totalShares || !pricePerShare) {
-            console.error('All fields are required');
-            setLocalError('All fields are required');
+        if (!assetName || !totalShares || !pricePerShare || files.length === 0) {
+            const message = !files.length ? 'At least one image is required' : 'All fields are required';
+            console.error(message);
+            setLocalError(message);
+            setSubmitButtonLoading(false);
             return;
         } else if (totalShares < 1) {
             console.error('Total shares must be greater than 0');
@@ -108,31 +116,44 @@ export default function CreateListing() {
 
 
         const images = document.getElementById('images').files;
+        // try {
+        //     console.log('---\nTrying to upload images to IPFS');
+
+        //     // Asynchronously prepare data for IPFS upload
+        //     const dataToUpload = await Promise.all(Array.from(images).map(async (file) => {
+        //         return file;
+        //     }));
+
+        //     // Upload the data to IPFS
+        //     const ipfsHashes = await upload({ data: dataToUpload });
+
+        //     // create an arry of IPFS URIs
+        //     const ipfsHashesArray = Object.values(ipfsHashes);
+        //     // Proceed to create the asset with the returned IPFS URIs
+        //     try {
+        //         await createAsset(assetName, totalShares, pricePerShare, ipfsHashesArray);
+        //         setSuccessMessage('Asset created successfully!'); // Add this line
+        //     } catch (error) {
+        //         console.error('Failed to create asset:', error);
+        //         setLocalError('Failed to create asset');
+        //     }
+        // } catch (error) {
+        //     console.error('Failed to upload images to IPFS or create asset:', error);
+        //     setLocalError('Failed to upload images to IPFS or create asset');
+        // }
+
         try {
             console.log('---\nTrying to upload images to IPFS');
-
-            // Asynchronously prepare data for IPFS upload
-            const dataToUpload = await Promise.all(Array.from(images).map(async (file) => {
-                return file;
-            }));
-
-            // Upload the data to IPFS
+            const dataToUpload = Array.from(files);
             const ipfsHashes = await upload({ data: dataToUpload });
-
-            // create an arry of IPFS URIs
             const ipfsHashesArray = Object.values(ipfsHashes);
-            // Proceed to create the asset with the returned IPFS URIs
-            try {
-                await createAsset(assetName, totalShares, pricePerShare, ipfsHashesArray);
-                setSuccessMessage('Asset created successfully!'); // Add this line
-            } catch (error) {
-                console.error('Failed to create asset:', error);
-                setLocalError('Failed to create asset');
-            }
+            await createAsset(assetName, totalShares, pricePerShare, ipfsHashesArray);
+            setSuccessMessage('Asset created successfully!');
         } catch (error) {
             console.error('Failed to upload images to IPFS or create asset:', error);
             setLocalError('Failed to upload images to IPFS or create asset');
         }
+
 
         setSubmitButtonLoading(false); // Reset submit button loading state
     };
@@ -190,7 +211,8 @@ export default function CreateListing() {
                         </div>
                         <div className="py-4">
                             <Label htmlFor="images" value="images" />
-                            <Input type="file" id="images" labelPlacement="outside-left" multiple isRequired />
+                            {/* <Input type="file" id="images" labelPlacement="outside-left" multiple isRequired /> */}
+                            <input type="file" id="images" labelPlacement="outside-left" multiple onChange={handleFileChange} isRequired />
                         </div>
                     </CardBody>
                     <CardFooter>
