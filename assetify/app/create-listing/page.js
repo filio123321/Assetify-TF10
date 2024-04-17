@@ -189,7 +189,7 @@ export default function CreateListing() {
                             <Input id="pricePerShare" label="Price per share in ETH" value={pricePerShare} onChange={(e) => setPricePerShare(e.target.value)} isRequired />
                         </div>
                         <div className="py-4">
-                            <Label htmlFor="images" value="Images" />
+                            <Label htmlFor="images" value="images" />
                             <Input type="file" id="images" labelPlacement="outside-left" multiple isRequired />
                         </div>
                     </CardBody>

@@ -359,7 +359,7 @@ export default function Home() {
 
           </div>
 
-          <div className="mx-auto max-w-7xl p-6 py-16 md:py-24 lg:px-8">
+          <div className="mx-auto max-w-7xl p-6 py-16 md:pt-24 lg:px-8">
             <div className="w-full flex md:justify-center lg:justify-center sm:justify-start">
               <div className="pr-8 text-3xl/[1.07] font-bold tracking-tight md:pr-16 md:text-4xl/[1.07]">
                 <span className="bg-gradient-to-br from-white to-zinc-500 bg-clip-text text-transparent">
@@ -369,7 +369,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mx-auto max-w-7xl p-6 pt-16 md:py-24 lg:px-8">
+          <div className="mx-auto max-w-7xl p-6 md:py-16 lg:px-8">
             <div className="grid items-start  gap-5 md:grid-cols-2">
               <iframe className='rounded-2xl h-full w-full min-w-max aspect-video' src="https://www.youtube.com/embed/YidZn1lc3r8?si=kLTRwpuiPrYyCYSP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
