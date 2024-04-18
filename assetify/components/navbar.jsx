@@ -28,8 +28,8 @@ export default function NavigationBar() {
         { label: "Marketplace", href: "/marketplace", type: "link" },
         { label: "Create a Listing", href: "/create-listing", type: "link" },
         { label: "Portfolio", href: "/portfolio", type: "link" },
-        { label: "CryptiX", href: "/cryptix", type: "link" },
-        { label: "About us", href: "/aboutus", type: "link" },
+        { label: "About us", href: "#aboutus", type: "link" },
+        { label: "Past Projects", href: "#pastproject", type: "link" },
     ];
 
 
@@ -65,14 +65,14 @@ export default function NavigationBar() {
                         Portfolio
                     </Link>
                 </NavbarItem> */}
-                <NavbarItem {...(pathname === "/cryptix" ? { isActive: true } : {})}>
-                    <Link href="/cryptix" aria-current="page" {...(pathname === "/cryptix" ? {} : { color: "foreground" })}>
-                        CryptiX
+                <NavbarItem {...(pathname === "#aboutus" ? { isActive: true } : {})}>
+                    <Link href="#aboutus" aria-current="page" {...(pathname === "#aboutus" ? {} : { color: "foreground" })}>
+                        About us
                     </Link>
                 </NavbarItem>
-                <NavbarItem {...(pathname === "/aboutus" ? { isActive: true } : {})}>
-                    <Link href="/aboutus" aria-current="page" {...(pathname === "/aboutus" ? {} : { color: "foreground" })}>
-                        About us
+                <NavbarItem {...(pathname === "#pastproject" ? { isActive: true } : {})}>
+                    <Link href="#pastproject" aria-current="page" {...(pathname === "#pastproject" ? {} : { color: "foreground" })}>
+                        Past Projects
                     </Link>
                 </NavbarItem>
             </NavbarContent>

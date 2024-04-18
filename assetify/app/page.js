@@ -3,7 +3,8 @@
 // import { useContext } from "react";
 import Image from 'next/image';
 import { useMediaQuery } from '@react-hook/media-query'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useRouter, usePathname } from 'next/navigation'
 import { AnimatePresence, motion } from "framer-motion";
 
 import { AppContext } from "@/context/context";
@@ -21,6 +22,8 @@ import { FaLink } from "react-icons/fa6";
 
 
 export default function Home() {
+  const pathname = usePathname();
+  const scrollRef = useRef(null);
   const [isDesktop, setIsDesktop] = useState(false);
 
   const Hristiyana = () => {
@@ -48,6 +51,17 @@ export default function Home() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    const hash = pathname.split('#')[1];
+    if (hash && scrollRef.current) {
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [pathname]);
+
 
 
   return (
@@ -108,7 +122,7 @@ export default function Home() {
 
           {/* Who are we? */}
           {/* Text saying Who are we? */}
-          <div className="mx-auto max-w-7xl p-6 py-16 md:py-24 lg:px-8">
+          <div className="mx-auto max-w-7xl p-6 py-16 md:py-24 lg:px-8" id="aboutus" ref={scrollRef}>
             <div className="w-full flex md:justify-center lg:justify-center sm:justify-start">
               <div className="pr-8 text-3xl/[1.07] font-bold tracking-tight md:pr-16 md:text-4xl/[1.07]">
                 <span className="bg-gradient-to-br from-white to-zinc-500 bg-clip-text text-transparent">
@@ -359,7 +373,7 @@ export default function Home() {
 
           </div>
 
-          <div className="mx-auto max-w-7xl p-6 py-16 md:pt-24 lg:px-8">
+          <div className="mx-auto max-w-7xl p-6 py-16 md:pt-24 lg:px-8" id="pastproject" ref={scrollRef}>
             <div className="w-full flex md:justify-center lg:justify-center sm:justify-start">
               <div className="pr-8 text-3xl/[1.07] font-bold tracking-tight md:pr-16 md:text-4xl/[1.07]">
                 <span className="bg-gradient-to-br from-white to-zinc-500 bg-clip-text text-transparent">

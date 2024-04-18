@@ -101,7 +101,8 @@ function SharesForm(props) {
             currentPrice += currentPrice / asset.totalShares;
         }
 
-        cost = cost + (cost * 0.03); // Add 10% fee
+        cost = cost + (cost * 0.1); // Add 10% fee
+        console.log("cost", cost);
         setEstimatedCost(cost);
     }, [sharesToBuy, asset]);
 
