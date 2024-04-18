@@ -6,7 +6,7 @@ import { Assetify__factory } from '@/generated/contract-types';
 export const AppContext = createContext();
 
 const { ethereum } = typeof window !== "undefined" ? window : {};
-const ASSETIFY_ADDRESS = '0xe1Fda408Eac8e4e6993AED77584549317F0293C1';
+const ASSETIFY_ADDRESS = '0xfe33af3b86ff2f77e1246837fd4f203a5325eb49';
 
 const AppProvider = ({ children }) => {
     const [account, setAccount] = useState("");
