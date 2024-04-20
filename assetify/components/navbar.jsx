@@ -28,8 +28,8 @@ export default function NavigationBar() {
         { label: "Marketplace", href: "/marketplace", type: "link" },
         { label: "Create a Listing", href: "/create-listing", type: "link" },
         { label: "Portfolio", href: "/portfolio", type: "link" },
-        { label: "About us", href: "#aboutus", type: "link" },
-        { label: "Past Projects", href: "#pastproject", type: "link" },
+        { label: "About us", href: "/#aboutus", type: "link" },
+        { label: "Past Projects", href: "/#pastproject", type: "link" },
     ];
 
 
