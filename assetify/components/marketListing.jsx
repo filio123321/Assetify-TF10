@@ -1,4 +1,3 @@
-// 'use client'
 import React, { useState, useEffect, useContext } from 'react';
 import { AppContext } from "@/context/context";
 import ListingBuy from '@/components/listingBuy';
@@ -8,6 +7,7 @@ import { Card, CardHeader, CardBody, CardFooter, Button, Tooltip, Skeleton, Imag
 function MarketListing(props) {
     const { asset } = props;
     const [imageLoaded, setImageLoaded] = useState(false);
+    const [imageSrc, setImageSrc] = useState(`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0] && asset.ipfsHashes[0].split('ipfs://')[1]}`);
     const { account, checkUserShareOwnership } = useContext(AppContext);
     const [ownsShares, setOwnsShares] = useState(false);
     const [isOwner, setIsOwner] = useState(false);
@@ -28,7 +28,15 @@ function MarketListing(props) {
         if (asset.assetId !== undefined && account) {
             checkOwnership();
         }
-    }, [account, asset, checkUserShareOwnership]);
+
+        const imageLoadTimeout = setTimeout(() => {
+            if (!imageLoaded) {
+                setImageSrc('/not_rendered.png');
+            }
+        }, 5000);
+
+        return () => clearTimeout(imageLoadTimeout);
+    }, [account, asset, checkUserShareOwnership, imageLoaded]);
 
     return (
         <>
@@ -44,7 +52,7 @@ function MarketListing(props) {
                         <Image
                             alt="Card background"
                             className={`object-cover rounded-xl ${!imageLoaded ? 'hidden' : ''}`}
-                            src={`https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0] && asset.ipfsHashes[0].split('ipfs://')[1]}`}
+                            src={imageSrc}
                             width={270}
                             onLoad={handleImageLoad}
                         />
