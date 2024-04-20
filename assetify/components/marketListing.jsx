@@ -7,7 +7,7 @@ import { Card, CardHeader, CardBody, CardFooter, Button, Tooltip, Skeleton } fro
 function MarketListing(props) {
     const { asset } = props;
     const [contentLoaded, setContentLoaded] = useState(false);
-    const [contentType, setContentType] = useState('image');
+    const [contentType, setContentType] = useState('');
     const [contentSrc, setContentSrc] = useState('');
     const { account, checkUserShareOwnership } = useContext(AppContext);
     const [ownsShares, setOwnsShares] = useState(false);
@@ -26,24 +26,29 @@ function MarketListing(props) {
             checkOwnership();
         }
 
-        const url = `https://923c0163885cbdec43fe9f8f82870f09.ipfscdn.io/ipfs/${asset.ipfsHashes[0] && asset.ipfsHashes[0].split('ipfs://')[1]}`;
-        fetch(url, { method: 'HEAD' })
+        const ipfsHash = asset.ipfsHashes[0]?.split('ipfs://')[1];
+        const ipfsUrl = `https://ipfs.io/ipfs/${ipfsHash}`; // Using public IPFS gateway for example
+
+        fetch(ipfsUrl, { method: 'HEAD' })
             .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
                 const fileType = response.headers.get('Content-Type');
-                if (fileType.startsWith('image')) {
+                if (fileType?.startsWith('image/')) {
                     setContentType('image');
-                    setContentSrc(url);
-                } else if (fileType.startsWith('video')) {
+                    setContentSrc(ipfsUrl);
+                } else if (fileType?.startsWith('video/')) {
                     setContentType('video');
-                    setContentSrc(url);
+                    setContentSrc(ipfsUrl);
                 } else if (fileType === 'application/pdf') {
                     setContentType('pdf');
-                    setContentSrc(url);
+                    setContentSrc(ipfsUrl);
                 } else {
-                    setContentSrc('/not_rendered.png');
+                    throw new Error('Unsupported file type');
                 }
             })
-            .catch(() => setContentSrc('/not_rendered.png'));
+            .catch(() => {
+                setContentSrc('/not_rendered.png');
+            });
 
         const loadTimeout = setTimeout(() => {
             if (!contentLoaded) {
@@ -51,8 +56,10 @@ function MarketListing(props) {
             }
         }, 5000);
 
-        return () => clearTimeout(loadTimeout);
-    }, [account, asset, checkUserShareOwnership]);
+        return () => {
+            clearTimeout(loadTimeout);
+        };
+    }, [account, asset, checkUserShareOwnership, contentLoaded]);
 
     const renderContent = () => {
         switch (contentType) {
